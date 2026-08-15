@@ -157,14 +157,14 @@ by default.
 ## Native renderer equivalence (phase 2)
 
 `tools/render_native.py` renders TBE by summing per-channel convolution with
-the captured matrix and applying the advance; no SDK involved. Against the
+the shipped filter set and applying the advance; no SDK involved. Against the
 oracle (`tools/phase2_validate.py`):
 
 | signal | residual |
 |---|---|
-| 3 s independent noise on all 8 channels | -133.6 dB |
-| 5 s programme-like, 4 correlated sources, level changes, quiet passage | -132.9 dB |
-| impulses at off-grid positions 333, 10007, 30001 past the guard | -147.1 dB |
+| 3 s independent noise on all 8 channels | -134.2 dB |
+| 5 s programme-like, 4 correlated sources, level changes, quiet passage | -134.0 dB |
+| impulses at off-grid positions 333, 10007, 30001 past the guard | -143.4 dB |
 | 30 s real music (3OA recording encoded to TBE via the study's matrix) | -112.1 dB overall, interior seconds at the -130 floor |
 | gate-stress signal (energy on ch 1 while W exactly zero) | differs by design; oracle mutes, convolution does not |
 
@@ -339,6 +339,11 @@ as an open question rather than papered over: the practical consequence is
 unchanged and already disclosed, since the MIT-derived path's accuracy is
 measured rather than predicted.
 
+(That question was answered shortly afterwards, and the hypothesis above is
+wrong: the SDK does use the AmbiSphericalConvolution path, just with the 3OA
+coefficients rather than the 2OA ones this section compares against. See
+"RESOLVED: the SDK uses the 3OA coefficient set" near the top of this file.)
+
 Whole-signal effect, same 30 s real-music slice as above: native render
 using ONLY the MIT-derived filters (no SDK, no local measurement) against
 the oracle: -34.9 dB. Against the -112.1 dB the measured filters reach,
@@ -386,11 +391,11 @@ Results against the oracle, same content and skip conventions as phase 2:
 - The SDK's actual R filter is recoverable without ever being able to
   express R in the input: under a known rotation the R-channel signal is
   known exactly, so the residual against the published-R render
-  deconvolves to the filter difference (-32.4 dB relative to the
+  deconvolves to the filter difference (-133.2 dB relative to the
   published R). One pitch-30 render suffices.
 - With the recovered R, the full grid, out-of-sample on 10 of its 11
   orientations (negative pitch, both rolls, two combined rotations):
-  every orientation lands between -131.3 and -133.0 dB. That band is a
+  every orientation lands between -132.1 and -134.3 dB. That band is a
   property of this grid and content, not a hard bound: independent
   verification at orientations outside the grid (including extremes such
   as pitch 85 and a (120, -40, 25) combination) measured -129.9 to
@@ -400,32 +405,27 @@ Results against the oracle, same content and skip conventions as phase 2:
 The recovered R filter derives from the proprietary binary, so it stays in
 data/ (untracked) under the same policy as the phase 1 measurement; the
 shipped MIT-derived path uses the published R and honestly carries the
--50 dB pitch/roll floor.
+float floor at every orientation.
 
-### What a clone without the SDK actually gets
+### What a clone without the SDK gets
 
-The orientation grid above compares two configurations that both use the
-measured filters on the 8 carried channels, differing only in ACN 6. Neither
-is what a clone runs, because the measured set is not published either. The
-third configuration, all 9 harmonics from Meta's MIT-published coefficients,
-was measured on the same content and probe grid:
+The same thing the author gets. Since the switch to Meta's 3OA coefficients
+the shipped filters are the SDK's own, so there is one configuration, not
+three, and no local measurement contributes to it. Measured across the
+11-point grid with the shipped filters and nothing else:
 
-| configuration | identity | yaw 90 | pitch 30 | roll 30 | 35/20/10 |
-|---|---|---|---|---|---|
-| measured 8 + recovered ACN 6 | -133.0 | -131.3 | -132.8 | -132.6 | -132.7 |
-| measured 8 + published ACN 6 | -133.0 | -131.3 | -50.6 | -50.7 | -52.6 |
-| MIT-derived, all 9 (a clone) | -25.8 | -25.8 | -25.9 | -25.9 | -25.9 |
+    worst orientation  -132.1 dB   (yaw 90)
+    best orientation   -134.3 dB   (identity)
 
-The MIT-derived set is flat across orientation at about -26 dB: with those
-filters on the carried channels, that error dominates everywhere and the
-ACN 6 choice stops being the limiting factor. So the 80 dB split in the
-figure is a property of the measured configuration specifically, not
-something a clone can observe. tools/render_trajectory.py prints which of
-the three it is running and the accuracy to expect from it.
+An earlier revision of this section reported three configurations, with a
+clone limited to about -26 dB and an 80 dB split between published and
+recovered ACN 6. All of that was an artefact of comparing against Meta's 2OA
+file; see "RESOLVED: the SDK uses the 3OA coefficient set" above.
 
-(The -26 dB here and the -35 dB quoted for the fixed-head MIT-only path are
-different test signals, phase 4's rotation content versus phase 2's
-programme-like material, not a contradiction.)
+The deconvolution recovery in phase 4 stage 4 survives as a cross-check
+rather than a necessity: the filter it recovers agrees with Meta's published
+3OA ACN 6 to -133.2 dB (r_filter_delta_db), which is an independent
+confirmation that the published set is what the engine runs.
 
 ## Dynamic rotation (phase 5)
 
@@ -452,9 +452,9 @@ tools/phase5_dynamic.py:
 
 tools/render_trajectory.py implements exactly this model natively (same
 trajectory-file format as the oracle helper, so one file drives both).
-Verified against the oracle: single steps -130.9 to -132.0 dB, chained
+Verified against the oracle: single steps -131.3 to -132.4 dB, chained
 steps in consecutive blocks -123.5 dB, a mixed-axis three-step sequence
--127.5 dB, and continuous per-block tracking (a 40-block yaw sweep,
+-127.7 dB, and continuous per-block tracking (a 40-block yaw sweep,
 updates every block) -113.7 dB. The continuous case sits slightly above
 the float floor: chaining ramps every block accumulates a small
 model-detail residual (the engine's ramp endpoint versus block-end state),
@@ -640,7 +640,7 @@ inherited.
 
 The correction is invariant for the decoder, which divides by the same gain
 it multiplies by, so phase 4 reproduces bit-identically either way (worst
-orientation -131.3 dB before and after). It matters only for encoding, and
+orientation -132.1 dB before and after). It matters only for encoding, and
 for anyone else implementing from the published table.
 
 **Round trip.** tools/ambix_to_tbe.py encode followed by decode returns the
@@ -747,7 +747,7 @@ already states:
   recovered filter carries essentially all of its energy in the same span:
   past tap 183 the largest value is 1.7e-08 against a peak of 0.221, which is
   the float32 storage floor, so the deconvolution window's tail is empty
-  rather than informative. The norms (published 0.3115, recovered 0.3051)
+  rather than informative. The norms (published 3OA 0.3051, recovered 0.3051)
   compare the populated regions.
 - The pitch/roll residual against the published R is L/R-symmetric to
   -82 to -84 dB relative to the residual itself, which puts the

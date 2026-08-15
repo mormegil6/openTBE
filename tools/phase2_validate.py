@@ -1,6 +1,6 @@
 """Phase 2: does the native renderer match the oracle on programme material?
 
-Renders the same signals through the oracle and through the captured-IR
+Renders the same signals through the oracle and through the shipped-filter
 convolution renderer, and reports the residual between the two.
 
 Signals:

@@ -138,10 +138,13 @@ site:
   `Audio360/include/` and `Audio360/macOS/libAudio360.dylib`, which is the
   directory layout the tooling expects.
 
-**That directory is not archived on the Wayback Machine**, unlike the
-installer pages, so it currently exists on one personal server with no
-maintainer. Anyone who cares about this format being reproducible in ten
-years should mirror it.
+That directory had never been captured by the Wayback Machine until this
+project requested it on 2026-08-15. Those are now the only snapshots that
+exist:
+
+- <https://web.archive.org/web/20260815073925/https://www.angelofarina.it/Public/Facebook-Spatial-Workstation/Download/SDK/> (index)
+- <https://web.archive.org/web/20260815073938/https://www.angelofarina.it/Public/Facebook-Spatial-Workstation/Download/SDK/Audio360_SDK_1.7.12-cd52f5f44271.zip> (1.7.12)
+- <https://web.archive.org/web/20260815073950/https://www.angelofarina.it/Public/Facebook-Spatial-Workstation/Download/SDK/Audio360_SDK_1.3.0.zip> (1.3.0)
 
 **You almost certainly do not need it.** Since the switch to Meta's 3OA
 coefficients, the filters openTBE ships reproduce the SDK to about -134 dB,

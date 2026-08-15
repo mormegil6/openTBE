@@ -2,7 +2,7 @@
 
 Complements phase2_validate.py (synthetic signals) with programme material:
 renders the given 8-channel TBE file through the oracle and through the
-captured-IR convolution renderer and reports the residual between the two.
+shipped-filter convolution renderer and reports the residual between the two.
 
 Also scans the input for the one regime where the two legitimately differ:
 samples where W is exactly zero while other channels carry signal (the
@@ -45,7 +45,7 @@ def main() -> int:
                          "oracle's end-of-stream gate cut")
     ap.add_argument("--ir", default=None,
                     help="filter npz to use (default: NativeRenderer's own "
-                         "default, measured if present else MIT-derived)")
+                         "default: the shipped MIT-derived set)")
     args = ap.parse_args()
 
     r = NativeRenderer(args.ir) if args.ir else NativeRenderer()

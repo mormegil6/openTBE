@@ -71,20 +71,13 @@ PHASE5_NPZ = DATA_DIR / "phase5_trajectory_residuals.npz"
 # TBE channel index -> letter and the ACN harmonic it carries, from
 # docs/PROTOCOL.md ("The MIT-derived filter set").
 TBE_LABELS = ["W", "Y", "X", "Z", "U", "V", "T", "S"]
-# No channel is singled out. TBE 3 (Z) and TBE 5 (V) were once flagged as a
-# "known gap"; that was an artefact of comparing against Meta's 2OA
-# coefficients rather than the 3OA set the SDK uses. With the right file every
-# channel matches the SDK measurement to the float floor, and channel 5 is the
-# best of the eight (docs/PROTOCOL.md).
-KNOWN_GAP_CHANNELS: set[int] = set()
 
 # Okabe-Ito colorblind-safe categorical pair: measured (blue) vs MIT-derived
 # (orange), used consistently across figures. Vermillion flags the two known
-# gap channels / any test signal that misses its pass threshold.
+# any test signal that misses its pass threshold.
 COLOR_MEASURED = "#0072B2"
 COLOR_MIT = "#E69F00"
 COLOR_FLAG = "#D55E00"
-COLOR_SHIPPED = "#009E73"   # Okabe-Ito green: the configuration that ships
 CMAP_SEQUENTIAL = "cividis"  # perceptually uniform, colorblind-safe
 
 skipped: list[tuple[str, str]] = []
@@ -153,7 +146,6 @@ def plot_filter_comparison(include_measured: bool = False) -> None:
     fig.suptitle(f"TBE filter frequency response: {title_note}", fontsize=13)
 
     for ch in range(8):
-        gap = ch in KNOWN_GAP_CHANNELS
         ax_mag, ax_phase = axes[ch]
 
         mit_ir = h_mit[ch, :, 0]
@@ -172,11 +164,7 @@ def plot_filter_comparison(include_measured: bool = False) -> None:
             ax_phase.plot(freqs, np.unwrap(np.angle(H_meas)),
                          color=COLOR_MEASURED, lw=1.3)
 
-        row_label = f"ch {ch} ({TBE_LABELS[ch]})"
-        if gap:
-            row_label += "\n(known gap)"
-        ax_mag.set_ylabel(row_label, fontsize=9,
-                          color=COLOR_FLAG if gap else "black")
+        ax_mag.set_ylabel(f"ch {ch} ({TBE_LABELS[ch]})", fontsize=9)
         ax_mag.grid(True, alpha=0.25, linewidth=0.6)
         ax_phase.grid(True, alpha=0.25, linewidth=0.6)
         ax_mag.set_xscale("log")
@@ -189,11 +177,12 @@ def plot_filter_comparison(include_measured: bool = False) -> None:
     axes[0, 0].legend(loc="lower left", fontsize=8)
     axes[-1, 0].set_xlabel("Hz")
     axes[-1, 1].set_xlabel("Hz")
-    gap_note = "no channel differs measurably from the published set"
-    fig.text(0.01, 0.005,
-             "L channel shown (R differs only by the m-parity sign rule, "
-             f"docs/PROTOCOL.md); {gap_note}.",
-             fontsize=7, color="dimgray")
+    foot = ("L channel shown; R differs only by the m-parity sign rule "
+            "(docs/PROTOCOL.md).")
+    if have_measured:
+        foot += (" The two curves overlap: the shipped filters reproduce the "
+                 "SDK's to -136 dB or better on every channel.")
+    fig.text(0.01, 0.005, foot, fontsize=7, color="dimgray")
     fig.tight_layout(rect=(0, 0.015, 1, 0.97))
     fig.savefig(fig_path, dpi=150)
     plt.close(fig)
@@ -219,8 +208,13 @@ def plot_orientation_heatmap() -> None:
     # set. NOT stage5, which substitutes an ACN 6 filter deconvolved from an
     # SDK render and is therefore proprietary-derived: plotting that under a
     # caption crediting published filters would misstate the provenance.
-    vals = d["shipped_db_mit_only"] if "shipped_db_mit_only" in d.files \
-        else d["stage3_db_published_r"]
+    # phase4_headtrack.py always writes this key but leaves it empty when it
+    # had no local measurement to contrast against, so test size, not presence.
+    # stage3_db_published_r is bit-identical to it (both are the shipped
+    # MIT-derived filters), so it is a provenance-correct fallback.
+    shipped = d["shipped_db_mit_only"] if "shipped_db_mit_only" in d.files \
+        else np.array([])
+    vals = shipped if shipped.size else d["stage3_db_published_r"]
 
     order_i = np.argsort(vals)[::-1]          # worst at top
     labels = [f"yaw {yaw[i]:g}, pitch {pitch[i]:g}, roll {roll[i]:g}"

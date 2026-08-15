@@ -13,8 +13,9 @@ and the IR recovered by regularised FFT division against the probe. The two
 estimates must agree within the numerical floor.
 
 Output: data/tbe8_ir_48k_block512.npz with the IR matrix and capture
-metadata. The data directory is not tracked; whether measured IRs of the
-proprietary engine can be published is an open question (docs/PLAN.md).
+metadata. The data directory is gitignored; whether measured IRs of the
+proprietary engine can be published was settled and the answer is no
+(docs/PLAN.md); they stay local.
 
 Usage: python tools/phase1_capture.py [--fs 48000] [--block 512]
 """

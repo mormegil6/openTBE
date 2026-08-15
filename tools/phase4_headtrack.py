@@ -23,7 +23,6 @@ Usage: python tools/phase4_headtrack.py
 
 from __future__ import annotations
 
-import itertools
 import subprocess
 import sys
 import tempfile
@@ -86,7 +85,6 @@ def acn_decode_filters() -> list[np.ndarray]:
 
 def render_native(x: np.ndarray, ypr, signs, order,
                   filters: list[np.ndarray]) -> np.ndarray:
-    gains = np.zeros(9)
     acn = np.zeros((len(x), 9))
     for k, (a, g) in enumerate(TBE_FROM_ACN):
         acn[:, a] = x[:, k].astype(np.float64) / g
@@ -135,9 +133,11 @@ def recover_r_filter(x, signs, order, filters,
                      probe_ypr=(0, 30, 0)) -> np.ndarray:
     """Recover the SDK's actual R (ACN 6) decode filter.
 
-    TBE carries no R, so phase 1 could not measure its filter, and the
-    MIT-published R differs slightly from the SDK's (about -50 dB residual
-    under pitch/roll). But under a known rotation the R-channel signal is
+    TBE carries no R, so phase 1 could not measure its filter directly.
+    Meta's published 3OA set supplies it and is already what the decode
+    uses, so this is a cross-check rather than a necessity: the recovered
+    filter agrees with the published one to -133.2 dB. Under a known
+    rotation the R-channel signal is
     known exactly, and the native-vs-oracle residual is that signal
     convolved with the filter difference (m=0 harmonics feed L and R
     identically, which the residual's L/R symmetry confirms). One
@@ -220,13 +220,13 @@ def main() -> int:
         from get_mit_filters import parse_mit_harmonics
         mit = parse_mit_harmonics(MIT_CPP)
         shipped = [mit[a].astype(np.float64) for a in range(9)]
-        print("stage 3a: orientation grid, MIT-derived filters (what ships)")
+        print("stage 3a: orientation grid, shipped filters (repeat of stage 3)")
         for ypr in grid:
             res = compare(x, ypr, signs, order, shipped)
             shipped_db.append(res)
             print(f"  ypr {str(ypr):>15}: {res:7.1f} dB")
 
-    print("stage 3: orientation grid, measured filters + published R")
+    print("stage 3: orientation grid, shipped filters")
     stage3_db = []
     for ypr in grid:
         res = compare(x, ypr, signs, order, filters)

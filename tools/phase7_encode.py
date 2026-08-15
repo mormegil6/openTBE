@@ -19,6 +19,9 @@ Four stages, run in the order 1, 2, 4, 3:
      candidate values apart.
   3. Round trip. Encode with tools/ambix_to_tbe.py, decode back, and check
      the harmonics TBE carries return unchanged.
+  4. End to end. Encode one master both ways and compare, alongside what the
+     delivery container costs on its own, so the comparison is interpretable.
+     Runs before stage 3 because it needs the Encoder while it is warm.
 
 Needs the FB360 Encoder installed, ffmpeg on PATH, and (for stage 2) a video
 file to mux, which it generates with ffmpeg.

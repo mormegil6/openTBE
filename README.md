@@ -108,10 +108,11 @@ the declared tap counts settle it before any audio is compared:
 |---|---|
 | 2OA declares | 180, 184, 181, 77, **80**, 179, 183, 84, 185 |
 | 3OA declares | 180, 183, 182, 77, **73**, 179, 183, 84, 185 |
-| measured from the SDK | 180, 183, 182, 77, **73**, 179, 183, 84, 185 |
+| measured from the SDK | 180, 183, 182, 77, **73**, 179, (n/a), 84, 185 |
 
-Per-channel residuals move from -8 to -38 dB against 2OA, to -136 to -149 dB
-against 3OA. All nine 3OA arrays also appear byte-for-byte inside
+Eight entries, not nine: ACN 6 is the harmonic TBE does not carry, so there
+was nothing to probe. Per-channel residuals move from -8 to -38 dB against
+2OA, to -136 to -149 dB against 3OA. All nine 3OA arrays also appear byte-for-byte inside
 `libAudio360.dylib`. The full account, including what the wrong file cost
 and why the wrong conclusion looked reasonable at the time, is in
 [docs/PROTOCOL.md](docs/PROTOCOL.md).
