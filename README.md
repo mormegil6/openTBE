@@ -179,9 +179,11 @@ the Encoder's focus feature was never measured. The mkv channel order,
 long listed here as an inference, is one no longer:
 [tools/mkv_order_probe.py](tools/mkv_order_probe.py) measured it against
 the Encoder's own mkv output, through the GUI and the CLI separately, and
-both match what openTBE writes. What no surviving file can settle is
-whether older Encoder builds differed at byte level, so an untouched FB360
-mkv from the era would still be a welcome contribution.
+both match what openTBE writes. The era-build worry then closed itself:
+the Encoder stamps its build into every file it writes, and the sibling
+study's surviving mp4 names v3.3.3, the same terminal release measured
+here. The one byte-level residue that no surviving file can settle is
+recorded in [docs/PROTOCOL.md](docs/PROTOCOL.md), phase 6.
 
 ## Checking any of this yourself
 
@@ -249,10 +251,6 @@ engineering.
   MetaMotion RL) were merged into it. Not started; contributions welcome.
 - **44.1 kHz filter sets.** Meta's release includes them; everything here
   was captured and validated at 48 kHz.
-- **An era Encoder mkv.** The channel order is now measured against
-  Encoder v3.3.3 ([tools/mkv_order_probe.py](tools/mkv_order_probe.py));
-  an untouched file from an older build would let the byte-level details
-  be compared too.
 - **FuMa conversion and quad-binaural**, the two real coverage gaps against
   the Encoder.
 

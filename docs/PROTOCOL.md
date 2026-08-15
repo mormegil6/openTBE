@@ -576,16 +576,22 @@ distinct-level per-channel probes: channel order and sample alignment
 survive both chains exactly, and a package without a head-locked input
 carries sample-exact silence in a structurally present track.
 
-Honest unknowns, narrowed on 2026-08-15 by the channel-order measurement
-above: what remains open is version history rather than structure. The
-sibling study's 2020 log came from whatever Encoder build was current then,
-and no output of that build survives, so anything an older build did
-differently at byte level (its exact internal Opus encoder settings
-included) is unverifiable; no output of the legacy MP4Box 0.8.1 survives
-either, so the mp4's file-level-plus-track-metas layout is the logged
-command's intent rather than a byte-compared artefact; and player-side
-compatibility cannot be tested against Facebook's ingestion, which no
-longer exists.
+Honest unknowns, narrowed twice on 2026-08-15: first by the channel-order
+measurement above, then by reading the build stamps. The Encoder writes
+its build into every file it produces, and the stamps identify the era
+chain precisely. The study's surviving mp4 names FB360 Encoder v3.3.3,
+git a0e6e0451b36 of 2020-04-02, on Windows; the copy measured throughout
+this project is v3.3.3, git dfc35c2093d1 of 2020-02-05, on macOS; both
+bundle ffmpeg 3.2. So the era build was not some older release but the
+same terminal v3.3.3, in its Windows sibling build, cut from a revision
+two months newer. What remains open: no mkv from that Windows build
+survives, so whether its Opus payload bytes match the Mac build's is
+unverifiable (the structural parameters measured above come from source
+the two builds share, but for the bytes that is inference, not
+measurement); no output of the legacy MP4Box 0.8.1 survives, so the mp4's
+file-level-plus-track-metas layout is the logged command's intent rather
+than a byte-compared artefact; and player-side compatibility cannot be
+tested against Facebook's ingestion, which no longer exists.
 
 ## Encode matrix (phase 7)
 

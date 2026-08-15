@@ -272,15 +272,17 @@ independent cross-check.
 ### The one thing you cannot reproduce
 
 Phase 6 compares against a genuine Encoder-produced mp4 that the sibling
-study happened to still have. The mkv side used to sit in this section too;
-it no longer does. `tools/mkv_order_probe.py` measures the mkv channel
-order against the Encoder's own output, through the GUI and the CLI
-separately, and both give TBE 1 to 8 then head-locked left/right, matching
-what `fb360_package.py` writes; anyone with the Encoder can rerun that.
-What stays irreproducible is the era artefact itself: no output of the
-2020-era Encoder build or of the legacy MP4Box 0.8.1 survives, so a
-byte-level comparison against those stays closed unless an untouched era
-file surfaces; see README.md, "Future work".
+study happened to still have; its embedded build stamp names FB360 Encoder
+v3.3.3 of 2020, the same terminal release measured throughout this
+project. The mkv side used to sit in this section too; it no longer does.
+`tools/mkv_order_probe.py` measures the mkv channel order against the
+Encoder's own output, through the GUI and the CLI separately, and both
+give TBE 1 to 8 then head-locked left/right, matching what
+`fb360_package.py` writes; anyone with the Encoder can rerun that. What
+you cannot reproduce is the era chain's exact bytes: the study's mp4 came
+from the Windows sibling build of v3.3.3, no mkv of which survives, and
+the legacy MP4Box 0.8.1 mux is preserved only as the logged command.
+docs/PROTOCOL.md, phase 6, holds the exact residue.
 
 ---
 
