@@ -452,9 +452,9 @@ tools/phase5_dynamic.py:
 
 tools/render_trajectory.py implements exactly this model natively (same
 trajectory-file format as the oracle helper, so one file drives both).
-Verified against the oracle: single steps -131.3 to -132.4 dB, chained
+Verified against the oracle: single steps -131.5 to -132.4 dB, chained
 steps in consecutive blocks -123.5 dB, a mixed-axis three-step sequence
--127.7 dB, and continuous per-block tracking (a 40-block yaw sweep,
+-127.8 dB, and continuous per-block tracking (a 40-block yaw sweep,
 updates every block) -113.7 dB. The continuous case sits slightly above
 the float floor: chaining ramps every block accumulates a small
 model-detail residual (the engine's ramp endpoint versus block-end state),
