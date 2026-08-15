@@ -548,6 +548,21 @@ mkv variant (the upload format):
   ffmpeg's demux handle at exact alignment (lag 0 through the whole
   chain).
 
+Channel order, measured rather than inferred (2026-08-15). The 10-channel
+ordering above was originally taken from the mp4 track layout plus the
+tbe_8.2 tag, because no Encoder-produced mkv had survived to check against.
+tools/mkv_order_probe.py closed that: it feeds the Encoder an hhoa plus
+head-locked probe in which every channel carries a unique tone frequency, a
+unique level on a -3 dB ladder, and a 25 ms burst at a unique time, then
+identifies each channel of the produced file by all three independently.
+Encoder v3.3.3, run separately through its CLI and its GUI (the two are
+known to differ elsewhere; see phase 8), writes the same layout both ways:
+TBE 1 to 8 then head-locked left/right in one 10-channel Opus stream,
+mapping family 255, 10 uncoupled streams, identity mapping, pre-skip 312,
+carrying the same encoder_metadata (format="tbe_8", channel_map="0 1 2 3 4
+5 6 7") and tbe_8.2 AudioChannelConfiguration tags from both paths.
+Parameter for parameter, that is the stream fb360_package.py writes.
+
 A caution about round-trip numbers: any dB figure here is a measurement
 of particular content, not a property of the pipeline, and must not be
 used as an acceptance threshold for other material. On the archived
@@ -561,15 +576,16 @@ distinct-level per-channel probes: channel order and sample alignment
 survive both chains exactly, and a package without a head-locked input
 carries sample-exact silence in a structurally present track.
 
-Honest unknowns: the original app encoded Opus internally, so its exact
-encoder settings beyond the stream parameters are unknown; the 10-channel
-ordering (TBE 1 to 8 then head-locked left/right) matches the mp4 track
-order and the tbe_8.2 naming but could not be checked against an original
-mkv, since none survived in the archive; no output of the legacy MP4Box
-0.8.1 survives either, so the file-level-plus-track-metas layout is the
-logged command's intent rather than a byte-compared artefact; and
-player-side compatibility cannot be tested against Facebook's ingestion,
-which no longer exists.
+Honest unknowns, narrowed on 2026-08-15 by the channel-order measurement
+above: what remains open is version history rather than structure. The
+sibling study's 2020 log came from whatever Encoder build was current then,
+and no output of that build survives, so anything an older build did
+differently at byte level (its exact internal Opus encoder settings
+included) is unverifiable; no output of the legacy MP4Box 0.8.1 survives
+either, so the mp4's file-level-plus-track-metas layout is the logged
+command's intent rather than a byte-compared artefact; and player-side
+compatibility cannot be tested against Facebook's ingestion, which no
+longer exists.
 
 ## Encode matrix (phase 7)
 

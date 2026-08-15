@@ -164,7 +164,7 @@ Against the Encoder's real format menus, its CLI names in brackets:
 | TBE in, which it calls HHOA `[hhoa]` | yes, native throughout |
 | `.tbe` audio conversion | yes, as an 8-channel wav |
 | Facebook 360 video mp4 `[fb360-hhoa]` | yes, verified against a real Encoder-produced file |
-| FB360 Matroska `[mkv-360]` | yes, though the channel order could not be confirmed, see below |
+| FB360 Matroska `[mkv-360]` | yes, channel order measured against the Encoder's own mkv output |
 | Head-locked stereo bed | yes, on packaging, ingest, and the head-tracked render path |
 | Binaural render, fixed and head-tracked | yes, and beyond the Encoder: that was the SDK's job |
 | 1st-order ambiX in `[ambix-first]` | yes, the second-order channels come out silent |
@@ -174,12 +174,14 @@ Against the Encoder's real format menus, its CLI names in brackets:
 | Focus (`--focus-size-deg`) | no, and not characterised |
 
 **Known gaps**, stated because the point of this project is that its claims
-can be checked: FuMa conversion and quad-binaural are not implemented, the
-Encoder's focus feature was never measured, and no original
-Encoder-produced mkv survived for a byte comparison, so the mkv channel
-order rests on the mp4 track layout plus the Encoder's own metadata rather
-than a direct check. If you have an untouched FB360 mkv from the era, that
-is the single most useful thing anyone could contribute.
+can be checked: FuMa conversion and quad-binaural are not implemented, and
+the Encoder's focus feature was never measured. The mkv channel order,
+long listed here as an inference, is one no longer:
+[tools/mkv_order_probe.py](tools/mkv_order_probe.py) measured it against
+the Encoder's own mkv output, through the GUI and the CLI separately, and
+both match what openTBE writes. What no surviving file can settle is
+whether older Encoder builds differed at byte level, so an untouched FB360
+mkv from the era would still be a welcome contribution.
 
 ## Checking any of this yourself
 
@@ -247,8 +249,10 @@ engineering.
   MetaMotion RL) were merged into it. Not started; contributions welcome.
 - **44.1 kHz filter sets.** Meta's release includes them; everything here
   was captured and validated at 48 kHz.
-- **An original Encoder-produced mkv**, to confirm the channel order
-  directly.
+- **An era Encoder mkv.** The channel order is now measured against
+  Encoder v3.3.3 ([tools/mkv_order_probe.py](tools/mkv_order_probe.py));
+  an untouched file from an older build would let the byte-level details
+  be compared too.
 - **FuMa conversion and quad-binaural**, the two real coverage gaps against
   the Encoder.
 

@@ -211,6 +211,7 @@ python tools/phase2_validate.py     # native renderer vs SDK, several signals
 python tools/phase4_headtrack.py    # rotation conventions, orientation grid
 python tools/phase5_dynamic.py      # time-varying orientation
 python tools/phase7_encode.py       # encode matrix vs the FB360 Encoder
+python tools/mkv_order_probe.py --cli data/mkv_probe   # mkv channel order
 python tools/plot_validation.py --include-measured   # all five figures
 ```
 
@@ -224,6 +225,7 @@ What each should report:
 | `phase4_headtrack.py` | fitted convention `signs (-1,-1,1), order zyx`; worst orientation -132.1 dB across the 11-point grid |
 | `phase5_dynamic.py` | five cases, -113.7 to -132.4 dB |
 | `phase7_encode.py` | first-order gains 0.4886025; agreement with `sqrt((2l+1)/4pi)`; round trip at 1e-17; whole-file encode indistinguishable from the container's own floor |
+| `mkv_order_probe.py` | all 10 channels identified: TBE 1-8 then head-locked L/R; OpusHead mapping family 255, pre-skip 312 |
 
 Phase 3 is not a script: it was the licensing decision that the shipped
 filters are generated from Meta's MIT-licensed published coefficients rather
@@ -270,11 +272,15 @@ independent cross-check.
 ### The one thing you cannot reproduce
 
 Phase 6 compares against a genuine Encoder-produced mp4 that the sibling
-study happened to still have. No original Encoder-produced **mkv** survived,
-so the mkv channel order rests on the mp4 track layout plus the Encoder's own
-metadata rather than on a direct comparison. If you have an untouched
-FB360-Encoder mkv from the era, that is the single most useful thing anyone
-could contribute; see README.md, "Future work".
+study happened to still have. The mkv side used to sit in this section too;
+it no longer does. `tools/mkv_order_probe.py` measures the mkv channel
+order against the Encoder's own output, through the GUI and the CLI
+separately, and both give TBE 1 to 8 then head-locked left/right, matching
+what `fb360_package.py` writes; anyone with the Encoder can rerun that.
+What stays irreproducible is the era artefact itself: no output of the
+2020-era Encoder build or of the legacy MP4Box 0.8.1 survives, so a
+byte-level comparison against those stays closed unless an untouched era
+file surfaces; see README.md, "Future work".
 
 ---
 
