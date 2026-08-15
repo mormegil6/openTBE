@@ -65,7 +65,10 @@ python tools/fb360_package.py out_tbe8.wav video.mp4 out.mkv \
 # Open an existing FB360 file and render it to binaural
 python tools/fb360_ingest.py old_fb360.mp4 tbe8.wav --binaural out.wav
 
-# Render TBE to binaural, fixed head or head-tracked
+# Render TBE to binaural, fixed head or head-tracked. The trajectory file
+# is plain text, one orientation update per line:
+#   <outputFrame> <yawDeg> <pitchDeg> <rollDeg>
+# e.g. "0 0 0 0" then "96000 90 0 0" turns to yaw 90 at the 2 s mark.
 python tools/render_native.py in_tbe8.wav out_binaural.wav
 python tools/render_trajectory.py in_tbe8.wav trajectory.txt out.wav
 ```
