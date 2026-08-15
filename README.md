@@ -57,7 +57,9 @@ Then, whichever direction you need:
 # Encode: ambisonic master -> TBE
 python tools/ambix_to_tbe.py master_ambix.wav out_tbe8.wav
 
-# Package like the old Encoder did (video required, head-locked stereo optional)
+# Package like the old Encoder did (video required, head-locked stereo
+# optional; this and fb360_ingest.py need ffmpeg on PATH, and the mp4
+# variant also MP4Box: brew install ffmpeg gpac)
 python tools/fb360_package.py out_tbe8.wav video.mp4 out.mkv \
        --headlocked narration.wav
 

@@ -322,7 +322,9 @@ def plot_phase2_residuals() -> None:
         ax.annotate(f"inaudible past here ({thr:.0f} dB)", (1.0, thr),
                     xycoords=("axes fraction", "data"), xytext=(-4, 4),
                     textcoords="offset points", ha="right", fontsize=7.5,
-                    color="gray")
+                    color="0.25",
+                    bbox=dict(facecolor="white", edgecolor="none",
+                              alpha=0.85, pad=1.5))
     lo = min(bar_vals) if bar_vals else -140.0
     ax.set_ylim(lo * 1.12, 0)
     ax.set_ylabel("difference from the SDK (dB)\nlower is better")
@@ -351,6 +353,11 @@ def plot_phase2_residuals() -> None:
             if "programme" in rs_names:
                 start = int(d["residual_start_sample"][
                     rs_names.index("programme")])
+        # The residual is stored on the oracle's OUTPUT timeline, which runs
+        # ahead of the input by the engine's warm-up advance (3584 samples at
+        # block 512, docs/PROTOCOL.md "Warm-up window"). Add it so the axis
+        # really is the input timeline it claims to be.
+        start += int(d["advance"]) if "advance" in d.files else 3584
         nz = np.nonzero(mono)[0]
         if len(nz):
             mono = mono[: nz[-1] + 1]

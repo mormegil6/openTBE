@@ -156,6 +156,9 @@ def main() -> int:
         OUT_NPZ,
         fs=FS,
         guard=GUARD,
+        # The residual arrays live on the output timeline, which the engine
+        # advances by this many samples relative to the input (block 512).
+        advance=3584,
         test_names=np.array(list(_residual_scalars.keys())),
         test_residual_db=np.array(list(_residual_scalars.values()),
                                   dtype=np.float64),
