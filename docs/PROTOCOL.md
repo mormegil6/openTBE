@@ -377,17 +377,16 @@ or more everywhere tested.
 
 Results against the oracle, same content and skip conventions as phase 2:
 
-- Identity rotation: -133.0 dB (the ACN-domain refactor of the fixed
+- Identity rotation: -134.3 dB (the ACN-domain refactor of the fixed
   decode is exact).
-- Yaw only, any angle tested (+-30, 90, 180): -131.3 to -132.7 dB. Yaw is
+- Yaw only, any angle tested (+-30, 90, 180): -132.1 to -133.9 dB. Yaw is
   a z-rotation, which never mixes m=0 with other m, so the harmonic TBE
   lacks stays empty and yaw tracking is exact with no extra information.
-- Pitch and roll with Meta's published R filter: a uniform -50 dB floor.
-  Scanning a scale factor on the R filter gives a clean bowl centred at
-  1.0 (zeroing R costs 32 dB), so the SDK really decodes rotated-in R
-  energy with a filter close to, but not identical to, the published one:
-  a third case of proprietary-vs-published filter drift, much smaller
-  than V and Z's.
+- Pitch and roll, with Meta's published ACN 6 from the 3OA set:
+  -133.9 to -134.2 dB, i.e. the same floor as yaw. An earlier revision of
+  this list reported a uniform -50 dB floor here and read it as a third
+  case of filter drift; that was the 2OA comparison again, and there is no
+  drift to explain.
 - The SDK's actual R filter is recoverable without ever being able to
   express R in the input: under a known rotation the R-channel signal is
   known exactly, so the residual against the published-R render
