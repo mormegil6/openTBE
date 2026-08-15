@@ -13,12 +13,11 @@ MIT licensed, "Copyright (c) 2018-present, Facebook, Inc.":
 - `AmbiBinauralCoefficients{2OA,3OA}.{cpp,hh}` - the published per-harmonic
   impulse responses, both 44.1 and 48 kHz. `tools/get_tbe_filters.py`
   parses the **3OA** set to build openTBE's shipped filter set. The 2OA
-  file is kept so the mistaken-2OA comparison recorded in docs/PROTOCOL.md
-  stays re-runnable.
-  A first pass checked the measured impulse-response matrix against these
-  by unconstrained least-squares projection (5.4e-4 relative residual
-  energy at exact alignment); PLAN.md and PROTOCOL.md describe the more
-  precise, zero-fit derivation that superseded it.
+  file is the control, not a leftover: the finding that the engine decodes
+  TBE through the 3OA path rests on comparing the SDK against both
+  candidates (docs/PROTOCOL.md, the RESOLVED section: tap counts, then
+  -8 to -38 dB per channel against 2OA versus -136 to -149 dB against
+  3OA), and that comparison is only re-runnable with both files present.
 - `AmbiSphericalConvolution.{cpp,hh}` - Meta's own Ambisonics-to-binaural
   decoder: convolve each ACN harmonic with its mono IR, then combine
   harmonics with m >= 0 into L and R identically and harmonics with m < 0
