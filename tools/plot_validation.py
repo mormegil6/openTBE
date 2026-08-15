@@ -71,11 +71,12 @@ PHASE5_NPZ = DATA_DIR / "phase5_trajectory_residuals.npz"
 # TBE channel index -> letter and the ACN harmonic it carries, from
 # docs/PROTOCOL.md ("The MIT-derived filter set").
 TBE_LABELS = ["W", "Y", "X", "Z", "U", "V", "T", "S"]
-# TBE 3 (Z) and TBE 5 (V): "a real but disclosed gap" per README.md /
-# docs/PLAN.md -- the proprietary SDK's filters for these two harmonics have
-# differ from the published ones in the measured decode, cause open; see
-# docs/PROTOCOL.md, "Chasing the two weak channels".
-KNOWN_GAP_CHANNELS = {3, 5}
+# No channel is singled out. TBE 3 (Z) and TBE 5 (V) were once flagged as a
+# "known gap"; that was an artefact of comparing against Meta's 2OA
+# coefficients rather than the 3OA set the SDK uses. With the right file every
+# channel matches the SDK measurement to the float floor, and channel 5 is the
+# best of the eight (docs/PROTOCOL.md).
+KNOWN_GAP_CHANNELS: set[int] = set()
 
 # Okabe-Ito colorblind-safe categorical pair: measured (blue) vs MIT-derived
 # (orange), used consistently across figures. Vermillion flags the two known
@@ -142,7 +143,7 @@ def plot_filter_comparison(include_measured: bool = False) -> None:
               "what any clone reproduces without the SDK. The measured "
               "overlay is a local-only view (--include-measured), since the "
               "measured filters are proprietary-derived and never published; "
-              "see README.md, 'Filter provenance'.")
+              "see README.md, 'Provenance, and what is not published'.")
 
     n_fft = 4096
     freqs = rfftfreq(n_fft, d=1.0 / fs)
@@ -188,12 +189,7 @@ def plot_filter_comparison(include_measured: bool = False) -> None:
     axes[0, 0].legend(loc="lower left", fontsize=8)
     axes[-1, 0].set_xlabel("Hz")
     axes[-1, 1].set_xlabel("Hz")
-    gap_note = ("vermillion rows = TBE 3 (Z) and 5 (V), the two channels "
-                "where the SDK's measured filters diverge from what Meta "
-                "later published" if have_measured else
-                "vermillion rows = TBE 3 (Z) and 5 (V), the two channels "
-                "carrying the disclosed measured-vs-published gap "
-                "(docs/PROTOCOL.md)")
+    gap_note = "no channel differs measurably from the published set"
     fig.text(0.01, 0.005,
              "L channel shown (R differs only by the m-parity sign rule, "
              f"docs/PROTOCOL.md); {gap_note}.",
@@ -219,7 +215,12 @@ def plot_orientation_heatmap() -> None:
     # Every configuration this figure used to compare now coincides: the
     # shipped filters are the SDK's own published ones, so there is a single
     # curve to draw. stage5 is the grid as measured with them.
-    vals = d["stage5_db_recovered_r"]
+    # The shipped configuration, all nine harmonics from Meta's published 3OA
+    # set. NOT stage5, which substitutes an ACN 6 filter deconvolved from an
+    # SDK render and is therefore proprietary-derived: plotting that under a
+    # caption crediting published filters would misstate the provenance.
+    vals = d["shipped_db_mit_only"] if "shipped_db_mit_only" in d.files \
+        else d["stage3_db_published_r"]
 
     order_i = np.argsort(vals)[::-1]          # worst at top
     labels = [f"yaw {yaw[i]:g}, pitch {pitch[i]:g}, roll {roll[i]:g}"

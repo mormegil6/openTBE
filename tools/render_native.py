@@ -1,7 +1,8 @@
-"""Native TBE-to-binaural renderer: convolution with the captured IR matrix.
+"""Native TBE-to-binaural renderer: convolution with the shipped IR matrix.
 
-Reproduces the oracle's fixed-head decode without the SDK: the output is the
-sum over channels of the input convolved with the captured impulse responses,
+Reproduces the SDK's fixed-head decode without the SDK: the output is the
+sum over channels of the input convolved with the filter set generated from
+Meta's published 3OA coefficients (tools/get_mit_filters.py),
 time-advanced by the oracle's warm-up constant so the two outputs align
 sample for sample. Runs natively on any CPU; no Rosetta, no dylib.
 

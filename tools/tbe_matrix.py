@@ -7,8 +7,9 @@ whole encode is a diagonal 16x8 matrix and the decode is its reciprocal.
 
 ACN 6 is absent. That is the harmonic conventionally written R, the
 second-order zonal (height) term, and it is why TBE is 8 channels rather than
-9. Nothing in the format can carry it, which is the whole reason phase 4 has
-to recover the SDK's R filter indirectly (docs/PROTOCOL.md).
+9. Nothing in the format can carry it, but rotation feeds it under pitch and
+roll, so a head-tracked decode still needs its filter. Meta's published 3OA
+set includes it (docs/PROTOCOL.md, phase 4).
 
 Provenance of the gains, in order of authority:
 

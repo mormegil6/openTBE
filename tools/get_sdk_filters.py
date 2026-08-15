@@ -1,26 +1,33 @@
-"""Measure the SDK's real filters, checking every prerequisite and saying
-exactly what to do about each one that is missing.
+"""Re-run openTBE's measurements against your own Audio360 SDK copy.
 
 This is the second of two filter scripts:
 
-    tools/get_mit_filters.py   always works, needs only this repository,
-                               gives a decoder accurate to about -26 dB
-                               against the SDK
-    tools/get_sdk_filters.py   this one; needs an Audio360 SDK, and takes
-                               the decode to about -131 dB
+    tools/get_mit_filters.py   what you normally want. Needs only this
+                               repository, takes seconds, and produces the
+                               filters openTBE ships, which reproduce the SDK
+                               to about -134 dB.
+    tools/get_sdk_filters.py   this one. Needs an Audio360 SDK, and exists so
+                               the claim above can be checked independently
+                               rather than believed.
 
-Run it and it walks the prerequisites in order, stopping at the first one
-that is not satisfied and telling you the specific command or link that
-fixes it. Once everything is in place it builds the helper binaries and runs
-the measurements without further input.
+It walks the prerequisites in order, stops at the first one that is not
+satisfied, and prints the specific command or link that fixes it. Once
+everything is in place it builds the helper binaries and runs the
+measurements without further input.
 
     python tools/get_sdk_filters.py
     python tools/get_sdk_filters.py --sdk /path/to/sdk
     python tools/get_sdk_filters.py --check     # diagnose only, change nothing
 
-openTBE does not download the SDK. That is deliberate and the reasoning is
-in docs/REPRODUCING.md, "On not downloading the SDK". Everything measured
-lands in data/, which is gitignored, and is never redistributed.
+Nothing here improves the decode. Before openTBE was corrected to Meta's 3OA
+coefficients the measured filters really were needed for accuracy; they are
+not any more, and the renderers ignore them (tools/render_native.py defaults
+to the shipped set unconditionally). What this produces is an independent
+cross-check, and the inputs for tools/plot_validation.py --include-measured.
+
+openTBE does not download the SDK. The reasoning is in docs/REPRODUCING.md,
+"On not downloading the SDK". Everything measured lands in data/, which is
+gitignored, and is never redistributed.
 """
 
 from __future__ import annotations
@@ -73,9 +80,10 @@ def blocked(problem: str, fix: str) -> int:
     for line in fix.rstrip().splitlines():
         print(f"  {line}" if not line.startswith("  ") else line)
     print("\n  Then run this script again.")
-    print("\n  Meanwhile openTBE still works: tools/get_mit_filters.py gives "
-          "a\n  decoder accurate to about -26 dB against the SDK, which needs "
-          "none of\n  the above.")
+    print("\n  This does not hold openTBE back: tools/get_mit_filters.py "
+          "already gives\n  a decoder accurate to about -134 dB against the "
+          "SDK, and needs none\n  of the above. This script only re-measures "
+          "that independently.")
     return 1
 
 
@@ -91,6 +99,8 @@ def find_sdk(explicit: str | None) -> tuple[Path | None, list[Path]]:
     partial: list[Path] = []
     cands: list[Path] = []
     if explicit:
+        # only the directory the user named; the search list below is for the
+        # no-argument case, and reporting it here would be misleading
         cands = [Path(explicit).expanduser()]
     else:
         env = os.environ.get("OPENTBE_ORACLE_DIR")
@@ -238,8 +248,7 @@ def main() -> int:
     if subprocess.run([sys.executable, str(HERE / "phase4_headtrack.py")]
                       ).returncode != 0:
         print("\n  That did not finish. The step 5 measurement is still "
-              "good, which\n  leaves yaw fully accurate and pitch/roll at "
-              "about -50 dB.")
+              "good; the\n  ACN 6 cross-check simply did not run.")
 
     print("\n" + "=" * 60)
     have_m, have_r = MEASURED_NPZ.exists(), R_NPZ.exists()
@@ -248,12 +257,15 @@ def main() -> int:
     print(f"  [{'x' if have_r else ' '}] recovered ACN 6       "
           f"{R_NPZ.relative_to(ROOT)}")
     if have_m and have_r:
-        print("\n  Done: about -131 dB against the SDK at any orientation.")
+        print("\n  Done. Both cross-checks are on disk. Compare them against")
+        print("  the shipped filters with:")
+        print("    python tools/get_mit_filters.py --verify")
+        print("    python tools/plot_validation.py --include-measured")
     elif have_m:
-        print("\n  Partly done: about -131 dB on yaw, about -50 dB with "
-              "pitch or roll.")
-    print("  The renderers pick these up automatically and print which set "
-          "they used.")
+        print("\n  Partly done: the impulse-response matrix is measured, "
+              "the ACN 6\n  cross-check is not.")
+    print("\n  The renderers are unaffected either way: they use the shipped "
+          "filters.")
     return 0
 
 

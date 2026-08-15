@@ -133,7 +133,7 @@ The matrix is stored in `data/` as `tbe8_ir_48k_block512.npz`, together with
 the capture metadata (advance, block, probe position, SDK version). That
 path is gitignored and stays so: the licensing question was settled rather
 than deferred, and the decision is that the measured matrix is never
-published (docs/PLAN.md, and README.md under "Filter provenance").
+published (docs/PLAN.md, and README.md under "Provenance, and what is not published").
 
 A single-sample W impulse still yields its complete 180-sample response
 because the response fits inside the one-to-two-block hold before the gate
@@ -243,15 +243,17 @@ local measurement in the path: fixed head -134.2, -134.0 and -143.4 dB on
 the three phase 2 signals; time-varying rotation -113.7 to -132.4 dB across
 the five phase 5 cases.
 
-The rest of this section is kept as written, because the reasoning it
-records was sound given the wrong input file, and because the failure mode
-is worth preserving: two independent local measurements agreeing with each
+**Everything in the next section, "The MIT-derived filter set", was written
+against the 2OA file and is kept as written**, because the reasoning it
+records was sound given the wrong input, and because the failure mode is
+worth preserving: two independent local measurements agreeing with each
 other far better than either agreed with the published filter was correctly
 read as "the published filter is not what this engine runs", and incorrectly
 read as "the engine's filters were revised later". The third possibility,
-that the engine runs a different published set, went unconsidered.
+that the engine runs a different published set, went unconsidered. Read that
+section as history; the numbers above supersede its numbers.
 
-## The MIT-derived filter set
+## The MIT-derived filter set (written against 2OA; superseded above)
 
 `tools/get_mit_filters.py` derives a shippable TBE-domain filter set
 from Meta's own published, MIT-licensed Ambisonics-to-binaural coefficients

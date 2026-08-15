@@ -1,21 +1,22 @@
 """Phase 4: head-tracked (rotated-listener) decode, verified per orientation.
 
-Native chain: TBE -> ACN harmonics (per-channel gains, R absent enters as
-zero) -> order-2 real-SH rotation (tools/rotation.py) -> fixed
-Ambisonics-to-binaural decode (mono IR per harmonic, L/R combined by the
-sign of m). The ACN-domain decode filters come from the measured TBE
-capture (times the encode gains, undoing the TBE scaling) for the 8
-harmonics TBE carries, and from Meta's MIT-published set for harmonic 6
-(R), which TBE lacks but which receives energy under pitch and roll.
+Native chain: TBE -> ACN harmonics (per-channel gains) -> order-2 real-SH
+rotation (tools/rotation.py) -> fixed Ambisonics-to-binaural decode (mono IR
+per harmonic, L/R combined by the sign of m). All nine ACN decode filters
+come from Meta's published 3OA coefficients, ACN 6 included: TBE cannot
+carry that harmonic, but rotation feeds it under pitch and roll, and the
+published set supplies it.
 
-The oracle side uses bin/tbe_render_rot (build per the header comment in
-tools/tbe_render_rot.cpp), which is the study's helper with the listener
-rotation taken from the command line.
+The oracle side uses bin/tbe_render_rot, which is the study's helper with the
+listener rotation taken from the command line.
 
 Stage 1 fits the SDK's undocumented yaw/pitch/roll conventions (sign per
 axis, composition order) against the oracle using single-axis probes.
 Stage 2 measures the native-vs-oracle residual across an orientation grid
-with the fitted convention. Results go to docs/PROTOCOL.md.
+with the fitted convention. Stages 3 and 4 recover the SDK's own ACN 6
+filter by deconvolution and re-measure with it; that is now a cross-check
+rather than a necessity, since the published filter already lands at the
+float floor. Results go to docs/PROTOCOL.md.
 
 Usage: python tools/phase4_headtrack.py
 """
@@ -23,7 +24,6 @@ Usage: python tools/phase4_headtrack.py
 from __future__ import annotations
 
 import itertools
-import re
 import subprocess
 import sys
 import tempfile

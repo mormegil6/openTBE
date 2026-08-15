@@ -18,8 +18,9 @@ python tools/get_mit_filters.py    # always works, needs only this repo
 python tools/get_sdk_filters.py    # needs an Audio360 SDK
 ```
 
-The first gives a working decoder, accurate to about -26 dB against the SDK.
-The second takes that to about -131 dB, and walks every prerequisite in
+The first gives a decoder accurate to about -134 dB against the SDK, which
+is the float floor and needs nothing proprietary. The second re-runs the
+measurements against your own SDK copy, and walks every prerequisite in
 order, stopping at the first thing that is missing and printing the specific
 command or link that fixes it. `--check` diagnoses without changing
 anything. Everything below is the detail behind those two.
@@ -80,7 +81,7 @@ python tools/plot_validation.py
 `plot_validation.py` will report that it skipped three of four figures,
 naming the `data/*.npz` files it wanted. That is correct and expected: those
 come from measurements against proprietary software, and the measured data
-is deliberately never published (see README.md, "Filter provenance"). Tier 2
+is deliberately never published (see README.md, "Provenance, and what is not published"). Tier 2
 is how you generate them yourself.
 
 ---
@@ -144,9 +145,9 @@ years should mirror it.
 
 **You almost certainly do not need it.** Since the switch to Meta's 3OA
 coefficients, the filters openTBE ships reproduce the SDK to about -134 dB,
-the arithmetic's own floor, at every tested orientation. The SDK is now
-useful for independently re-running the measurements, not for getting an
-accurate decode.
+the arithmetic's own floor, at every tested orientation. The SDK is useful
+for independently re-running the measurements, not for getting an accurate
+decode.
 
 **Check your version**, because copies in circulation may differ and a
 different engine version may not reproduce these numbers exactly:
@@ -216,9 +217,9 @@ What each should report:
 |---|---|
 | `phase0_lti.py` | nine LTI tests pass; warm-up advance 3584 at block 512 |
 | `phase1_capture.py` | writes `data/tbe8_ir_48k_block512.npz`, two independent methods agreeing to about -128 dB |
-| `phase2_validate.py` | -134, -134 and -143 dB on the three pass/fail signals; the gate-stress probe differs by design |
+| `phase2_validate.py` | -134.2, -134.0 and -143.4 dB on the three pass/fail signals; the gate-stress probe differs by design |
 | `phase4_headtrack.py` | fitted convention `signs (-1,-1,1), order zyx`; worst orientation -132.1 dB across the 11-point grid |
-| `phase5_dynamic.py` | five cases, -113.7 to -132.0 dB |
+| `phase5_dynamic.py` | five cases, -113.7 to -132.4 dB |
 | `phase7_encode.py` | first-order gains 0.4886025; agreement with `sqrt((2l+1)/4pi)`; round trip at 1e-17; whole-file encode indistinguishable from the container's own floor |
 
 Phase 3 is not a script: it was the licensing decision that the shipped
@@ -278,7 +279,7 @@ could contribute; see README.md, "Future work".
 
 It would be easier to ship `data/tbe8_ir_48k_block512.npz` and let anyone
 check the figures against it. openTBE does not, and the reasoning is in
-README.md under "Filter provenance": residual dB figures are facts about how
+README.md under "Provenance, and what is not published": residual dB figures are facts about how
 the SDK behaves, which is what the observation right covers and what this
 project reports freely. The SDK's actual filter response is its engineered
 content, and redistributing that as a file would be handing out the

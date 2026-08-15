@@ -1,13 +1,13 @@
 """Drive the Audio360 SDK reference decoder (the oracle) from Python.
 
-The oracle is the `tbe_render` helper built in the immersive-formats-evaluation
-study (pipeline/tbe/): it feeds raw float32 through the SDK's offline
-getAudioMix() path with the audio device disabled. The SDK dylib is x86_64
+The oracle is a small helper that feeds raw float32 through the SDK's
+offline getAudioMix() path with the audio device disabled. This repository
+builds its own (bin/tbe_render_rot, from tools/tbe_render_rot.cpp) and
+prefers it; the sibling study's `tbe_render` is accepted as a fallback. The SDK dylib is x86_64
 only, so on Apple Silicon the helper runs under Rosetta via `arch -x86_64`.
 
-The oracle directory is resolved from the OPENTBE_ORACLE_DIR environment
-variable, which must be set: no local path is assumed. It must contain the
-built `tbe_render` binary next to the SDK's `lib/` directory.
+OPENTBE_ORACLE_DIR is consulted only for that fallback; when
+bin/tbe_render_rot exists it is used and the variable is not read.
 
 Known behaviour, measured on 2026-08-14 (SDK 1.7.12, fs 48000, block 512):
 the engine discards roughly the first 7 blocks of the stream during warm-up,

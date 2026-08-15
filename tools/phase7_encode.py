@@ -5,7 +5,7 @@ the same for the encode half, against the Encoder's own command-line
 interface (tools/encoder_oracle.py), so the shipped matrix rests on
 measurement rather than on a published table.
 
-Three stages:
+Four stages, run in the order 1, 2, 4, 3:
 
   1. First-order gains, losslessly. The Encoder converts TBE to first-order
      ambiX as 24-bit PCM, no codec in the path, so a least-squares fit of

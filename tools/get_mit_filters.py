@@ -12,10 +12,11 @@ counts, before any audio is compared:
 
     2OA  {180, 184, 181, 77, 80, 179, 183, 84, 185}
     3OA  {180, 183, 182, 77, 73, 179, 183, 84, 185, ...}
-    measured, per TBE channel, mapped to ACN:
-         {180, 183, 182, 77, 73, 179, 183, 84, 185}
+    measured, per TBE channel, mapped to its ACN:
+         {180, 183, 182, 77, 73, 179,  --, 84, 185}
 
-Eight of eight match 3OA exactly. Against 2OA the per-channel residuals run
+Eight of eight match 3OA exactly (ACN 6 has no measured entry: TBE does not
+carry that harmonic, so phase 1 could not probe it). Against 2OA the per-channel residuals run
 -8 to -38 dB, which this project once wrote up as the SDK having a revised
 private filter set; against 3OA they run -136 to -149 dB, the float floor.
 See docs/PROTOCOL.md, "RESOLVED: the SDK uses the 3OA coefficient set".
@@ -168,9 +169,9 @@ def main() -> int:
         ir_len=h.shape[1],
         source="facebookarchive/Audio360 AmbiBinauralCoefficients3OA.cpp, MIT",
         source_commit="171bfbfa69c4724026ef8d06a0f5155b1a9de32b",
-        note="TBE-domain filters derived from Meta's published Ambisonics "
-             "IRs; see docs/PLAN.md and docs/PROTOCOL.md for the derivation "
-             "and its known limits on TBE channels 3 (Z) and 5 (V).",
+        note="TBE-domain filters derived from Meta's published 3OA Ambisonics "
+             "IRs. Reproduces the Audio360 SDK to about -134 dB; see "
+             "docs/PROTOCOL.md for the derivation and the measurements.",
     )
     print(f"-> {out}")
 

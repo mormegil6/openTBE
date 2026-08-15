@@ -36,7 +36,8 @@ Two practical limits, both measured rather than assumed:
 
 The Encoder is proprietary. Like the SDK oracle, it is used here only to
 observe behaviour, and nothing derived from it is published; see
-docs/PLAN.md on the licensing position and README.md, "Filter provenance".
+docs/PLAN.md on the licensing position and README.md, "Provenance, and
+what is not published".
 
 The install path is resolved from the OPENTBE_ENCODER environment variable,
 falling back to the default macOS install location.
