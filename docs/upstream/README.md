@@ -11,7 +11,7 @@ commit `171bfbfa69c4724026ef8d06a0f5155b1a9de32b` (2018-10-19), unmodified,
 MIT licensed, "Copyright (c) 2018-present, Facebook, Inc.":
 
 - `AmbiBinauralCoefficients{2OA,3OA}.{cpp,hh}` - the published per-harmonic
-  impulse responses, both 44.1 and 48 kHz. `tools/get_mit_filters.py`
+  impulse responses, both 44.1 and 48 kHz. `tools/get_tbe_filters.py`
   parses the **3OA** set to build openTBE's shipped filter set. The 2OA
   file is kept because openTBE compared against it by mistake for most of
   its life, so the comparison stays re-runnable (docs/PROTOCOL.md).
@@ -23,7 +23,7 @@ MIT licensed, "Copyright (c) 2018-present, Facebook, Inc.":
   decoder: convolve each ACN harmonic with its mono IR, then combine
   harmonics with m >= 0 into L and R identically and harmonics with m < 0
   into L as +f and R as -f. This is the algorithm half of the derivation
-  in tools/get_mit_filters.py and tools/phase4_headtrack.py.
+  in tools/get_tbe_filters.py and tools/phase4_headtrack.py.
 
 ## Facebook360AudioTerms_2017-08-11.txt
 

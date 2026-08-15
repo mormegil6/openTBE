@@ -47,7 +47,7 @@ python3 -m venv venv && source venv/bin/activate
 pip install numpy scipy soundfile matplotlib
 
 # Build the filter set. Needs nothing else, takes seconds.
-python tools/get_mit_filters.py
+python tools/get_tbe_filters.py
 ```
 
 Then, whichever direction you need:
@@ -175,15 +175,14 @@ Against the Encoder's real format menus, its CLI names in brackets:
 
 **Known gaps**, stated because the point of this project is that its claims
 can be checked: FuMa conversion and quad-binaural are not implemented, and
-the Encoder's focus feature was never measured. The mkv channel order,
-long listed here as an inference, is one no longer:
-[tools/mkv_order_probe.py](tools/mkv_order_probe.py) measured it against
-the Encoder's own mkv output, through the GUI and the CLI separately, and
-both match what openTBE writes. The era-build worry then closed itself:
-the Encoder stamps its build into every file it writes, and the sibling
-study's surviving mp4 names v3.3.3, the same terminal release measured
-here. The one byte-level residue that no surviving file can settle is
-recorded in [docs/PROTOCOL.md](docs/PROTOCOL.md), phase 6.
+the Encoder's focus feature was never measured. The mkv channel order is
+measured, not inferred:
+[tools/mkv_order_probe.py](tools/mkv_order_probe.py) reads it from the
+Encoder's own mkv output, GUI and CLI separately, and both match what
+openTBE writes. The build stamps embedded in the files pin the sibling
+study's chain to the same Encoder v3.3.3 measured here; what remains open,
+the Windows build's exact Opus bytes, is recorded in
+[docs/PROTOCOL.md](docs/PROTOCOL.md), phase 6.
 
 ## Checking any of this yourself
 

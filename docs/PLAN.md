@@ -177,7 +177,7 @@ what was actually believed at each step.
       C-406/10) covers the measurement act itself, independent of this.
       Not legal advice; see docs/upstream/ for the primary sources
 - [x] Build the MIT-source filter generator
-      (tools/get_mit_filters.py). Correction to the earlier finding: a
+      (tools/get_tbe_filters.py). Correction to the earlier finding: a
       rigorous, zero-fit derivation (Meta's own decoder algorithm composed
       with the study's own encode gains, no parameter fit to data anywhere)
       gives a more precise and more honest picture than the licensing

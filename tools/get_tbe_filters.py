@@ -44,8 +44,8 @@ is needed to obtain that; the local measurement (tools/phase1_capture.py)
 now serves only as an independent cross-check.
 
 Usage:
-    python tools/get_mit_filters.py            # writes data/tbe8_filters_mit.npz
-    python tools/get_mit_filters.py --verify   # compare against a local
+    python tools/get_tbe_filters.py            # writes data/tbe8_filters_mit.npz
+    python tools/get_tbe_filters.py --verify   # compare against a local
                                                # measurement, if one exists
 """
 

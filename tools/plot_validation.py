@@ -5,7 +5,7 @@ Reads whatever data/*.npz files are present and writes PNGs to figures/:
   filter_comparison.png       magnitude + phase of the shipped filters, all
                                8 TBE channels. Needs
                                data/tbe8_filters_mit.npz, which ships by
-                               default (tools/get_mit_filters.py); the
+                               default (tools/get_tbe_filters.py); the
                                measured overlay additionally needs
                                data/tbe8_ir_48k_block512.npz, which only
                                exists on a machine with the SDK
@@ -112,7 +112,7 @@ def plot_filter_comparison(include_measured: bool = False) -> None:
     if not MIT_IR.exists():
         note_skip(fig_path.name,
                    f"{MIT_IR} not found; run "
-                   "'python tools/get_mit_filters.py' first (no SDK "
+                   "'python tools/get_tbe_filters.py' first (no SDK "
                    "needed, this ships by default)")
         return
 

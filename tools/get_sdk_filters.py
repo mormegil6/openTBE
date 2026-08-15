@@ -2,7 +2,7 @@
 
 This is the second of two filter scripts:
 
-    tools/get_mit_filters.py   what you normally want. Needs only this
+    tools/get_tbe_filters.py   what you normally want. Needs only this
                                repository, takes seconds, and produces the
                                filters openTBE ships, which reproduce the SDK
                                to about -134 dB.
@@ -80,7 +80,7 @@ def blocked(problem: str, fix: str) -> int:
     for line in fix.rstrip().splitlines():
         print(f"  {line}" if not line.startswith("  ") else line)
     print("\n  Then run this script again.")
-    print("\n  This does not hold openTBE back: tools/get_mit_filters.py "
+    print("\n  This does not hold openTBE back: tools/get_tbe_filters.py "
           "already gives\n  a decoder accurate to about -134 dB against the "
           "SDK, and needs none\n  of the above. This script only re-measures "
           "that independently.")
@@ -259,7 +259,7 @@ def main() -> int:
     if have_m and have_r:
         print("\n  Done. Both cross-checks are on disk. Compare them against")
         print("  the shipped filters with:")
-        print("    python tools/get_mit_filters.py --verify")
+        print("    python tools/get_tbe_filters.py --verify")
         print("    python tools/plot_validation.py --include-measured")
     elif have_m:
         print("\n  Partly done: the impulse-response matrix is measured, "

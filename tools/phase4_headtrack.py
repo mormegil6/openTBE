@@ -79,7 +79,7 @@ def acn_decode_filters() -> list[np.ndarray]:
     -134 dB at every tested orientation, ACN 6 included. No local
     measurement is involved or needed (docs/PROTOCOL.md, phase 4).
     """
-    from get_mit_filters import parse_mit_harmonics
+    from get_tbe_filters import parse_mit_harmonics
     harmonics = parse_mit_harmonics(MIT_CPP)
     return [harmonics[acn].astype(np.float64) for acn in range(9)]
 

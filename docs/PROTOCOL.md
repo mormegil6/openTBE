@@ -226,7 +226,7 @@ each published set:
 | 6 | -36.2 | **-146.1** |
 | 7 | -22.0 | **-146.5** |
 
-(The vs-3OA column is `tools/get_mit_filters.py --verify` against the
+(The vs-3OA column is `tools/get_tbe_filters.py --verify` against the
 current local capture; the exact float-floor values wobble by a few dB
 between captures, the vs-2OA column's -8 to -38 dB does not.)
 
@@ -261,7 +261,7 @@ section as history; the numbers above supersede its numbers.
 
 ## The MIT-derived filter set (written against 2OA; superseded above)
 
-`tools/get_mit_filters.py` derives a shippable TBE-domain filter set
+`tools/get_tbe_filters.py` derives a shippable TBE-domain filter set
 from Meta's own published, MIT-licensed Ambisonics-to-binaural coefficients
 (docs/upstream/audio360-mit/AmbiBinauralCoefficients2OA.cpp), rather than
 from the measured npz, so the shipped default has no provenance question

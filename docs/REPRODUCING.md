@@ -11,10 +11,10 @@ nothing proprietary at all.
 
 ## The short version
 
-Two scripts, named for what they need:
+Two scripts:
 
 ```bash
-python tools/get_mit_filters.py    # always works, needs only this repo
+python tools/get_tbe_filters.py    # always works, needs only this repo
 python tools/get_sdk_filters.py    # needs an Audio360 SDK
 ```
 
@@ -66,7 +66,7 @@ pip install numpy scipy soundfile matplotlib
 
 # Build the shipped filter set from Meta's MIT-licensed published
 # coefficients, which are snapshotted in docs/upstream/audio360-mit/.
-python tools/get_mit_filters.py
+python tools/get_tbe_filters.py
 
 # Render a TBE file to binaural, natively.
 python tools/render_native.py your_file_tbe8.wav out_binaural.wav
