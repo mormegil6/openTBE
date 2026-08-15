@@ -164,7 +164,7 @@ Against the Encoder's real format menus, its CLI names in brackets:
 | Binaural render, fixed and head-tracked | yes, and beyond the Encoder: that was the SDK's job |
 | 1st-order ambiX in `[ambix-first]` | yes, the second-order channels come out silent |
 | FuMa in/out `[fuma-first, fuma-second]` | no |
-| Quad-binaural output | no, and it is GUI-only in the Encoder anyway |
+| Quad-binaural output | no. Measured and characterised (4 yaws, LTI), but the Encoder uses a different HRTF set from the SDK, so implementing it would mean shipping proprietary-derived filters; see [docs/PROTOCOL.md](docs/PROTOCOL.md) phase 8 |
 | YouTube / Oculus / 180 variants | no |
 | Focus (`--focus-size-deg`) | no, and not characterised |
 

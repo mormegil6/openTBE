@@ -665,6 +665,55 @@ by nobody, since no script computed it. Stage 4 exists so that it is.
 Reproduce with `python tools/phase7_encode.py` (needs the Encoder installed
 and ffmpeg on PATH).
 
+## The Encoder's quad-binaural is a different renderer (phase 8)
+
+The Spatial Workstation shipped two binaural renderers, and openTBE
+reproduces one of them. Worth stating plainly, because "does openTBE match
+the FB360 Encoder" has different answers depending on which half is meant.
+
+The Encoder's only binaural output is **quad-binaural**, which is GUI-only:
+it is absent from the CLI enum. Feeding it an 8-channel TBE probe produces
+four stereo files, and it names them itself: `_0`, `_90`, `_180`, `_270`. So
+quad-binaural is four yaw orientations, 24-bit PCM, and the naming maps
+directly to openTBE's fitted convention with no sign flip (the diagonal of a
+yaw-vs-yaw comparison is the best cell in every row).
+
+Measured on a 6 s independent-noise probe, W held active throughout:
+
+- **It is LTI.** An 8-input 2-output MIMO identification, solving the 8x8
+  cross-spectral matrix per frequency bin, reconstructs the Encoder's output
+  to **-49.3 dB**. So quad-binaural is a fixed filter system and could be
+  implemented by convolution, exactly like the main decode. Two earlier
+  attempts said otherwise and were both wrong: a per-channel cross-spectral
+  division ignores the cross-terms, and a time-domain fit built with
+  `np.roll` wraps circularly and identifies nothing.
+- **Its filters are not the SDK's.** Against openTBE's decode at the
+  matching orientation, after best gain and lag alignment, the residual is
+  **-0.8 dB**: no match.
+- **Nor are they either published set.** Per channel, against both Meta's
+  2OA and 3OA coefficients, about 0 dB.
+- The transport latency is about 30 samples, not the SDK's 3569.
+
+That is consistent with what the binaries carry. Searching for the published
+coefficient arrays as raw float32 finds all nine of both sets inside
+`libAudio360.dylib`, and **none** in the Encoder or in the
+FB360-Spatialiser VST3. What those two do carry is `HrtfStandardTable`,
+`HrtfHqTable` and matching panners, which is the object-panner path rather
+than the ambisonic decode. Absence from a raw-float32 search is not proof
+(the data could be stored at other precision or transformed), but it points
+the same way as the measurement.
+
+Consequence for openTBE: it reproduces the **Audio360 SDK**, the engine that
+rendered FB360 playback, to the float floor. It does **not** reproduce the
+Encoder's quad-binaural deliverable, and implementing that would mean
+shipping filters measured out of proprietary software that match nothing
+published, which the provenance rule in README.md forbids. The measurement
+above is enough to implement it for anyone who does not share that
+constraint.
+
+The FB360 Encoder's *encode* path is a separate question and is matched: see
+"Encode matrix (phase 7)".
+
 ## Independent verification
 
 Every claim above was re-tested by independent probes (different probe
