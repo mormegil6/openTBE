@@ -1,0 +1,13 @@
+/docs/TBE_reverse_engineering_design_notes.md
+__pycache__/
+/data/
+/bin/
+# Figures that render proprietary-derived data (the measured SDK filter
+# response). Summary statistics about the measurement are published in
+# figures/; the filter response itself is not. See README.md, "Filter
+# provenance", and tools/plot_validation.py --include-measured.
+/figures/local/
+/docs/drafts_community.md
+/venv/
+CLAUDE.md
+.DS_Store
