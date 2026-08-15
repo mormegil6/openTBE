@@ -19,11 +19,10 @@ measurements without further input.
     python tools/get_sdk_filters.py --sdk /path/to/sdk
     python tools/get_sdk_filters.py --check     # diagnose only, change nothing
 
-Nothing here improves the decode. Before openTBE was corrected to Meta's 3OA
-coefficients the measured filters really were needed for accuracy; they are
-not any more, and the renderers ignore them (tools/render_native.py defaults
-to the shipped set unconditionally). What this produces is an independent
-cross-check, and the inputs for tools/plot_validation.py --include-measured.
+Nothing here improves the decode: the renderers ignore the measured filters
+(tools/render_native.py defaults to the shipped set unconditionally). What
+this produces is an independent cross-check, and the inputs for
+tools/plot_validation.py --include-measured.
 
 openTBE does not download the SDK. The reasoning is in docs/REPRODUCING.md,
 "On not downloading the SDK". Everything measured lands in data/, which is

@@ -194,8 +194,8 @@ print.
 
 `python tools/get_sdk_filters.py` walks the SDK-side prerequisites in order,
 stops at the first thing missing, and prints the command or link that fixes
-it. Since the 3OA correction it is a verification path rather than a
-requirement: you do not need it for an accurate decode.
+it. It is a verification path, not a requirement: you do not need it for an
+accurate decode.
 
 ### The figures
 
@@ -223,9 +223,8 @@ gitignored, and
 [docs/REPRODUCING.md](docs/REPRODUCING.md#seeing-what-this-repo-does-not-publish)
 lists every withheld artefact with the command that regenerates it.
 
-Since the 3OA correction this matters less than it did. The measurements no
-longer contribute to accuracy at all; they are an independent cross-check of
-a result that stands without them. Reasoning in
+The withheld measurements contribute nothing to accuracy; they are an
+independent cross-check of a result that stands without them. Reasoning in
 [docs/PLAN.md](docs/PLAN.md). Not legal advice.
 
 ## Status

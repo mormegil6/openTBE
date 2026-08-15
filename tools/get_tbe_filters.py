@@ -5,10 +5,9 @@ produces the 8-channel TBE filter set openTBE ships, using only that source:
 no code path here touches the proprietary SDK or any local measurement.
 
 Why the 3OA file and not 2OA. Meta published both. TBE is a second-order
-format, so 2OA looks like the obvious choice, and openTBE used it at first;
-that was wrong and it cost this project a long detour. The engine decodes
-TBE through the third-order path, and the give-away is in the declared tap
-counts, before any audio is compared:
+format, so 2OA looks like the obvious choice. It is the wrong one: the
+engine decodes TBE through the third-order path, and the give-away is in
+the declared tap counts, before any audio is compared:
 
     2OA  {180, 184, 181, 77, 80, 179, 183, 84, 185}
     3OA  {180, 183, 182, 77, 73, 179, 183, 84, 185, ...}
@@ -16,10 +15,10 @@ counts, before any audio is compared:
          {180, 183, 182, 77, 73, 179,  --, 84, 185}
 
 Eight of eight match 3OA exactly (ACN 6 has no measured entry: TBE does not
-carry that harmonic, so phase 1 could not probe it). Against 2OA the per-channel residuals run
--8 to -38 dB, which this project once wrote up as the SDK having a revised
-private filter set; against 3OA they run -136 to -149 dB, the float floor.
-See docs/PROTOCOL.md, "RESOLVED: the SDK uses the 3OA coefficient set".
+carry that harmonic, so phase 1 could not probe it). Against 2OA the
+per-channel residuals run -8 to -38 dB; against 3OA they run -136 to
+-149 dB, the float floor. See docs/PROTOCOL.md, "RESOLVED: the SDK uses
+the 3OA coefficient set".
 
 Derivation, from first principles, not curve-fitting:
 
@@ -41,7 +40,7 @@ Verified against the SDK: the resulting filters reproduce its decode to
 about -134 dB on programme-like material and -132 to -134 dB at every
 tested listener orientation, i.e. the arithmetic floor. Nothing proprietary
 is needed to obtain that; the local measurement (tools/phase1_capture.py)
-now serves only as an independent cross-check.
+serves only as an independent cross-check.
 
 Usage:
     python tools/get_tbe_filters.py            # writes data/tbe8_filters_mit.npz

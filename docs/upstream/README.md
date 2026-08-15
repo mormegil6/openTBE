@@ -13,8 +13,8 @@ MIT licensed, "Copyright (c) 2018-present, Facebook, Inc.":
 - `AmbiBinauralCoefficients{2OA,3OA}.{cpp,hh}` - the published per-harmonic
   impulse responses, both 44.1 and 48 kHz. `tools/get_tbe_filters.py`
   parses the **3OA** set to build openTBE's shipped filter set. The 2OA
-  file is kept because openTBE compared against it by mistake for most of
-  its life, so the comparison stays re-runnable (docs/PROTOCOL.md).
+  file is kept so the mistaken-2OA comparison recorded in docs/PROTOCOL.md
+  stays re-runnable.
   A first pass checked the measured impulse-response matrix against these
   by unconstrained least-squares projection (5.4e-4 relative residual
   energy at exact alignment); PLAN.md and PROTOCOL.md describe the more

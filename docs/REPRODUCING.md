@@ -146,9 +146,9 @@ exist:
 - <https://web.archive.org/web/20260815073938/https://www.angelofarina.it/Public/Facebook-Spatial-Workstation/Download/SDK/Audio360_SDK_1.7.12-cd52f5f44271.zip> (1.7.12)
 - <https://web.archive.org/web/20260815073950/https://www.angelofarina.it/Public/Facebook-Spatial-Workstation/Download/SDK/Audio360_SDK_1.3.0.zip> (1.3.0)
 
-**You almost certainly do not need it.** Since the switch to Meta's 3OA
-coefficients, the filters openTBE ships reproduce the SDK to about -134 dB,
-the arithmetic's own floor, at every tested orientation. The SDK is useful
+**You almost certainly do not need it.** The filters openTBE ships
+reproduce the SDK to about -134 dB, the arithmetic's own floor, at every
+tested orientation. The SDK is useful
 for independently re-running the measurements, not for getting an accurate
 decode.
 
@@ -259,22 +259,20 @@ open figures/local/filter_comparison_measured.png
 ```
 
 and you get the published curve and the SDK's real measured curve on the
-same axes, per channel. Since the 3OA correction they lie on top of each
-other, to -136 dB or better on all eight, which is what that correction
-means in picture form. `figures/local/` is gitignored, so it cannot be
-committed by accident.
+same axes, per channel, lying on top of each other to -136 dB or better on
+all eight. `figures/local/` is gitignored, so it cannot be committed by
+accident.
 
-Note that none of this changes what the renderers use. Since the 3OA
-correction they always load the shipped MIT-derived set, which already
-matches the SDK to the float floor, and the measured files serve only as an
-independent cross-check.
+None of this changes what the renderers use: they always load the shipped
+MIT-derived set, which matches the SDK to the float floor, and the measured
+files serve only as an independent cross-check.
 
 ### The one thing you cannot reproduce
 
 Phase 6 compares against a genuine Encoder-produced mp4 that the sibling
 study happened to still have; its embedded build stamp names FB360 Encoder
 v3.3.3 of 2020, the same terminal release measured throughout this
-project. The mkv side used to sit in this section too; it no longer does.
+project.
 `tools/mkv_order_probe.py` measures the mkv channel order against the
 Encoder's own output, through the GUI and the CLI separately, and both
 give TBE 1 to 8 then head-locked left/right, matching what
