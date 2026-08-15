@@ -16,8 +16,9 @@ delivery format):
                 and per-stream tags plus Google spherical-video RDF.
 
 Input spatial audio is an 8-channel TBE wav, or a 16-channel (or higher)
-ambiX wav which is first encoded to TBE with the same published matrix the
-study uses. Head-locked stereo is optional; silence is synthesised when
+ambiX wav which is first encoded to TBE with openTBE's measured encode
+matrix (tools/tbe_matrix.py; it differs from the study's published table
+only in the W gain, by 0.0018 dB). Head-locked stereo is optional; silence is synthesised when
 absent, since both variants structurally carry the head-locked track.
 
 Requires ffmpeg and MP4Box on PATH.

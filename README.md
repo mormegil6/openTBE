@@ -194,9 +194,10 @@ requirement: you do not need it for an accurate decode.
 
 ### The figures
 
-[`tools/plot_validation.py`](tools/plot_validation.py) draws these from the
-measurement runs, and they are committed so the evidence is visible without
-running anything:
+[`tools/plot_validation.py`](tools/plot_validation.py) draws these, and they
+are committed so the evidence is visible without running anything. Three
+come from the measurement runs; `filter_comparison.png` comes from the
+shipped filter set alone, so any clone reproduces it:
 
 - **[`orientation_grid.png`](figures/orientation_grid.png)** - the figure
   above: head-tracked accuracy at every tested orientation.
@@ -225,10 +226,13 @@ a result that stands without them. Reasoning in
 ## Status
 
 Working end to end: encode, package, ingest, fixed-head and head-tracked
-decode. Phases 0 to 7 of [docs/PLAN.md](docs/PLAN.md) are done, each
-measured against the original tool and derived in
-[docs/PROTOCOL.md](docs/PROTOCOL.md). The reverse engineering is complete;
-what remains is engineering.
+decode. Phases 0 to 6 of the original plan
+([docs/PLAN.md](docs/PLAN.md)) are done, plus two phases the plan never
+anticipated: the encode measurement (phase 7) and the quad-binaural
+characterisation (phase 8), both recorded in
+[docs/PROTOCOL.md](docs/PROTOCOL.md). Every phase is measured against the
+original tool. The reverse engineering is complete; what remains is
+engineering.
 
 ## Future work
 

@@ -3,9 +3,10 @@
 Status: executed. This is the original spec, written before any of it ran,
 kept as the record of the intended approach and its reasoning; the
 milestone list below tracks what actually happened against it, including
-where reality corrected the plan. Everything through phase 6 is done; see
-README.md for the current summary and docs/PROTOCOL.md for the measured
-results.
+where reality corrected the plan. Everything through phase 6 is done, and
+two later phases the plan never anticipated (7, the encode matrix; 8, the
+quad-binaural characterisation) are recorded in docs/PROTOCOL.md; see
+README.md for the current summary.
 
 ## Goal
 

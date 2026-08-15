@@ -22,7 +22,8 @@ Provenance of the gains, in order of authority:
 
    The second-order gains are only reachable through a lossy delivery
    container, so they were measured with a tonal probe (each harmonic on its
-   own frequency, read back by FFT), giving 0.6308 +- 0.001.
+   own frequency, read back by FFT), giving 0.630 to 0.632 across the four
+   channels, i.e. 0.631 +- 0.002: codec precision, nothing finer.
 
 2. Both agree with sqrt((2l+1)/(4*pi)), the N3D normalisation factor:
 

@@ -189,10 +189,12 @@ is arguably a defect of the oracle rather than of the replacement.
 
 ## RESOLVED: the SDK uses the 3OA coefficient set
 
-Everything below in this section was written while openTBE compared its
-measurements against `AmbiBinauralCoefficients2OA.cpp`. That was the wrong
-file, and it is the single cause of every "weak channel", "drift" and
-"disclosed gap" this document used to report.
+For most of its life openTBE compared its measurements against
+`AmbiBinauralCoefficients2OA.cpp`. That was the wrong file, and it is the
+single cause of every "weak channel", "drift" and "disclosed gap" this
+document used to report. This section records the correction and the
+evidence for it; the superseded reasoning is preserved separately, in the
+section marked "(written against 2OA; superseded above)".
 
 Meta published two coefficient sets. The SDK decodes TBE with the **3OA**
 one. The tap counts settle it before any audio is compared:
@@ -215,14 +217,18 @@ each published set:
 
 | TBE | vs 2OA | vs 3OA |
 |---|---|---|
-| 0 | -38.3 dB | **-135.9 dB** |
-| 1 | -25.4 | **-148.9** |
-| 2 | -16.0 | **-148.1** |
-| 3 | -11.8 | **-145.5** |
-| 4 | -24.0 | **-143.8** |
-| 5 | -8.3 | **-147.3** |
-| 6 | -36.2 | **-145.2** |
-| 7 | -22.0 | **-147.8** |
+| 0 | -38.3 dB | **-136.7 dB** |
+| 1 | -25.4 | **-146.0** |
+| 2 | -16.0 | **-145.8** |
+| 3 | -11.8 | **-143.7** |
+| 4 | -24.0 | **-143.4** |
+| 5 | -8.3 | **-147.5** |
+| 6 | -36.2 | **-146.1** |
+| 7 | -22.0 | **-146.5** |
+
+(The vs-3OA column is `tools/get_mit_filters.py --verify` against the
+current local capture; the exact float-floor values wobble by a few dB
+between captures, the vs-2OA column's -8 to -38 dB does not.)
 
 The consequences are large and all in the same direction:
 
@@ -744,7 +750,7 @@ already states:
   and with the stored filter at -123 to -125 dB, likely limited by the
   float32 storage of the npz. The published R spans 183 taps; the
   recovered filter carries essentially all of its energy in the same span:
-  past tap 183 the largest value is 1.7e-08 against a peak of 0.221, which is
+  past tap 183 the largest value is 1.5e-08 against a peak of 0.221, which is
   the float32 storage floor, so the deconvolution window's tail is empty
   rather than informative. The norms (published 3OA 0.3051, recovered 0.3051)
   compare the populated regions.

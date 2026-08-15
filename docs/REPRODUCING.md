@@ -71,7 +71,7 @@ python tools/get_mit_filters.py
 # Render a TBE file to binaural, natively.
 python tools/render_native.py your_file_tbe8.wav out_binaural.wav
 
-# Encode ambiX to TBE, and confirm the round trip is exact.
+# Encode ambiX to TBE.
 python tools/ambix_to_tbe.py master_ambix.wav out_tbe8.wav
 
 # Redraw the publishable figure.

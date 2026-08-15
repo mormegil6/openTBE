@@ -73,8 +73,8 @@ PHASE5_NPZ = DATA_DIR / "phase5_trajectory_residuals.npz"
 TBE_LABELS = ["W", "Y", "X", "Z", "U", "V", "T", "S"]
 
 # Okabe-Ito colorblind-safe categorical pair: measured (blue) vs MIT-derived
-# (orange), used consistently across figures. Vermillion flags the two known
-# any test signal that misses its pass threshold.
+# (orange), used consistently across figures. Vermillion flags any test
+# signal that misses its pass threshold.
 COLOR_MEASURED = "#0072B2"
 COLOR_MIT = "#E69F00"
 COLOR_FLAG = "#D55E00"
@@ -97,8 +97,9 @@ def plot_filter_comparison(include_measured: bool = False) -> None:
     #       reproduces.
     #   figures/local/filter_comparison_measured.png   adds the measured SDK
     #       curves. Those are a rendering of proprietary-derived filter data,
-    #       which this project never publishes (README.md, "Filter
-    #       provenance"), so it is written under figures/local/, which is
+    #       which this project never publishes (README.md, "Provenance,
+    #       and what is not published"), so it is written under
+    #       figures/local/, which is
     #       gitignored. Summary statistics ABOUT the measurement (the residual
     #       dB figures in the other three figures) are published; the filter
     #       response itself is not.
@@ -201,13 +202,11 @@ def plot_orientation_heatmap() -> None:
 
     d = np.load(PHASE4_NPZ)
     yaw, pitch, roll = d["yaw"], d["pitch"], d["roll"]
-    # Every configuration this figure used to compare now coincides: the
-    # shipped filters are the SDK's own published ones, so there is a single
-    # curve to draw. stage5 is the grid as measured with them.
-    # The shipped configuration, all nine harmonics from Meta's published 3OA
-    # set. NOT stage5, which substitutes an ACN 6 filter deconvolved from an
-    # SDK render and is therefore proprietary-derived: plotting that under a
-    # caption crediting published filters would misstate the provenance.
+    # One curve: the shipped configuration, all nine harmonics from Meta's
+    # published 3OA set. Deliberately NOT stage5, which substitutes an ACN 6
+    # filter deconvolved from an SDK render and is therefore
+    # proprietary-derived; plotting that under a caption crediting published
+    # filters would misstate the provenance (the two agree to -133 dB anyway).
     # phase4_headtrack.py always writes this key but leaves it empty when it
     # had no local measurement to contrast against, so test size, not presence.
     # stage3_db_published_r is bit-identical to it (both are the shipped

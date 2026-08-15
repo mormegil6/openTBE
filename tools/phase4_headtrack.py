@@ -10,13 +10,15 @@ published set supplies it.
 The oracle side uses bin/tbe_render_rot, which is the study's helper with the
 listener rotation taken from the command line.
 
-Stage 1 fits the SDK's undocumented yaw/pitch/roll conventions (sign per
-axis, composition order) against the oracle using single-axis probes.
-Stage 2 measures the native-vs-oracle residual across an orientation grid
-with the fitted convention. Stages 3 and 4 recover the SDK's own ACN 6
-filter by deconvolution and re-measure with it; that is now a cross-check
-rather than a necessity, since the published filter already lands at the
-float floor. Results go to docs/PROTOCOL.md.
+Stages, matching the printed output: stage 0 is a convention-free sanity
+check at the identity rotation; stages 1 and 2 fit the SDK's undocumented
+yaw/pitch/roll conventions (sign per axis, then composition order) against
+the oracle using single-axis probes; stage 3 measures the native-vs-oracle
+residual across an orientation grid with the fitted convention; stages 4
+and 5 recover the SDK's own ACN 6 filter by deconvolution and re-measure
+the grid with it. The recovery is a cross-check rather than a necessity,
+since the published filter already lands at the float floor. Results go to
+docs/PROTOCOL.md.
 
 Usage: python tools/phase4_headtrack.py
 """
@@ -38,7 +40,6 @@ from rotation import listener_rotation_matrix, sh_rotation_matrix
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 ROT_BIN = ROOT / "bin" / "tbe_render_rot"
-MEASURED_NPZ = ROOT / "data" / "tbe8_ir_48k_block512.npz"
 MIT_CPP = ROOT / "docs" / "upstream" / "audio360-mit" / "AmbiBinauralCoefficients3OA.cpp"
 DATA_DIR = ROOT / "data"
 GRID_NPZ = DATA_DIR / "phase4_orientation_grid.npz"
@@ -210,22 +211,6 @@ def main() -> int:
             (0, 30, 0), (0, -30, 0), (0, 0, 30), (0, 0, -30),
             (35, 20, 10), (-60, -25, 15)]
 
-    # The configuration a clone without the SDK actually runs: all 9 harmonics
-    # from Meta's MIT-published coefficients. Measured on the same grid so the
-    # published figure can show what a reader gets, not only what the two
-    # measured configurations get. Skipped when there is no local measurement,
-    # since then it is the same thing `filters` already holds.
-    shipped_db = []
-    if MEASURED_NPZ.exists():
-        from get_mit_filters import parse_mit_harmonics
-        mit = parse_mit_harmonics(MIT_CPP)
-        shipped = [mit[a].astype(np.float64) for a in range(9)]
-        print("stage 3a: orientation grid, shipped filters (repeat of stage 3)")
-        for ypr in grid:
-            res = compare(x, ypr, signs, order, shipped)
-            shipped_db.append(res)
-            print(f"  ypr {str(ypr):>15}: {res:7.1f} dB")
-
     print("stage 3: orientation grid, shipped filters")
     stage3_db = []
     for ypr in grid:
@@ -272,8 +257,9 @@ def main() -> int:
         roll=grid_arr[:, 2],
         stage3_db_published_r=np.array(stage3_db, dtype=np.float64),
         stage5_db_recovered_r=np.array(stage5_db, dtype=np.float64),
-        # Empty when there was no local measurement to contrast against.
-        shipped_db_mit_only=np.array(shipped_db, dtype=np.float64),
+        # Identical to stage3_db by construction: stage 3 runs the shipped
+        # filters. The key survives for plot_validation.py, which prefers it.
+        shipped_db_mit_only=np.array(stage3_db, dtype=np.float64),
         signs=np.array(signs, dtype=np.int64),
         order=order,
         r_filter_delta_db=delta_db,

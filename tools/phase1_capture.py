@@ -26,6 +26,8 @@ import argparse
 import sys
 from pathlib import Path
 
+import datetime as _dt
+
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -33,7 +35,7 @@ from oracle import render, residual_db
 
 GUARD = 8000          # silence before the pilot region (warm-up window)
 PROBE = 16000         # impulse position, well inside the pilot region
-IR_LEN = 4096         # captured IR window, generous vs the observed ~178
+IR_LEN = 4096         # captured IR window, generous vs the observed 185
 PILOT_LEVEL = 1e-5
 NOISE_LEVEL = 0.1
 
@@ -135,8 +137,11 @@ def main() -> int:
         probe=PROBE,
         pilot_level=PILOT_LEVEL,
         ir_len=IR_LEN,
+        # The engine this project measured. If yours differs, update it:
+        # grep -h TBE_AUDIOENGINE_VERSION include/TBE_AudioEngine.h
         sdk="Audio360 1.7.12 x86_64",
-        captured="2026-08-14",
+        # Stamped at run time: anyone re-capturing gets their own date.
+        captured=_dt.date.today().isoformat(),
     )
     print(f"-> {out}")
     return 0
