@@ -30,9 +30,8 @@ Encoder for encoding. Every number here came out of those measurements, and
 the scripts that produce them are in this repository.
 
 It grew out of
-**[immersive-formats-evaluation](https://github.com/mormegil6/immersive-formats-evaluation)**
-([GitLab](https://git.pg.edu.pl/p829296/immersive-formats-evaluation)), a
-benchmarking study of immersive audio formats. That study needed to render
+**[immersive-formats-evaluation](https://github.com/mormegil6/immersive-formats-evaluation)**,
+a benchmarking study of immersive audio formats. That study needed to render
 TBE without a DAW, so it built a headless harness around the SDK
 ([`pipeline/tbe/`](https://github.com/mormegil6/immersive-formats-evaluation/tree/main/pipeline/tbe),
 built 2026-07-28/29). openTBE uses that harness as its reference oracle and
@@ -252,8 +251,7 @@ engineering.
 
 ## Credits and sources
 
-- **[immersive-formats-evaluation](https://github.com/mormegil6/immersive-formats-evaluation)**
-  ([GitLab](https://git.pg.edu.pl/p829296/immersive-formats-evaluation)) -
+- **[immersive-formats-evaluation](https://github.com/mormegil6/immersive-formats-evaluation)** -
   the benchmarking study this repository grew out of. Its
   [`pipeline/tbe/`](https://github.com/mormegil6/immersive-formats-evaluation/tree/main/pipeline/tbe)
   holds the headless SDK harness openTBE uses as its decode oracle, and
