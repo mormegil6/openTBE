@@ -213,6 +213,15 @@ shipped filter set alone, so any clone reproduces it:
 - **[`filter_comparison.png`](figures/filter_comparison.png)** - the shipped
   filters, magnitude and phase per channel.
 
+### The mkv cross-check
+
+[`proof/fb360_encoder_crosscheck/`](proof/fb360_encoder_crosscheck/) holds
+the actual FB360 Encoder output behind the mkv channel-order claim above:
+one file from a macOS Encoder, one from the exact Windows build that made
+the sibling study's original recordings. Different bytes, identical
+decoded audio, sha256 included so you can check that without re-running
+anything.
+
 ### Provenance, and what is not published
 
 The filters openTBE ships are generated directly from

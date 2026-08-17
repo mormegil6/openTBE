@@ -576,22 +576,44 @@ distinct-level per-channel probes: channel order and sample alignment
 survive both chains exactly, and a package without a head-locked input
 carries sample-exact silence in a structurally present track.
 
-Honest unknowns, narrowed twice on 2026-08-15: first by the channel-order
-measurement above, then by reading the build stamps. The Encoder writes
-its build into every file it produces, and the stamps identify the era
-chain precisely. The study's surviving mp4 names FB360 Encoder v3.3.3,
-git a0e6e0451b36 of 2020-04-02, on Windows; the copy measured throughout
-this project is v3.3.3, git dfc35c2093d1 of 2020-02-05, on macOS; both
-bundle ffmpeg 3.2. So the era build was not some older release but the
-same terminal v3.3.3, in its Windows sibling build, cut from a revision
-two months newer. What remains open: no mkv from that Windows build
-survives, so whether its Opus payload bytes match the Mac build's is
-unverifiable (the structural parameters measured above come from source
-the two builds share, but for the bytes that is inference, not
-measurement); no output of the legacy MP4Box 0.8.1 survives, so the mp4's
-file-level-plus-track-metas layout is the logged command's intent rather
-than a byte-compared artefact; and player-side compatibility cannot be
-tested against Facebook's ingestion, which no longer exists.
+Honest unknowns, narrowed on 2026-08-15 and again on 2026-08-17. First the
+channel-order measurement above, then the build stamps: the Encoder writes
+its build into every file it produces, and the study's surviving mp4 names
+FB360 Encoder v3.3.3, git a0e6e0451b36+ of 2020-04-02, on Windows, against
+git dfc35c2093d1 of 2020-02-05 measured throughout this project on macOS.
+So the era build was the same terminal v3.3.3, in its Windows sibling
+build, cut from a revision two months newer with local modifications on
+top (the `+`).
+
+That Windows build is Farina's own installer archive, so it could be run
+rather than only reasoned about. Measured 2026-08-17, on a real Windows 10
+machine: FB360 Encoder installed from `FB-SpatialWorkstation-VST-3.3.3-
+Win64.zip` (the same archive REPRODUCING.md points to) reports git
+a0e6e0451b36+ in its own output, exactly matching the study's mp4, i.e.
+this is not a similar build but the literal one. Fed the same tone-and-
+burst probe used above, through the GUI (ffmpeg and MP4Box supplied
+manually, since the Encoder's own auto-fetch of both points at dead
+mirrors), it wrote a channel order, OpusHead, and encoder_metadata
+identical to the Mac run's, matching the analysis above exactly. The
+Opus-compressed bytes are not identical between the two platforms'
+output: raw container size differs (1,161,697 bytes Mac vs 1,161,624
+Windows) and a byte-level diff of the extracted streams disagrees almost
+everywhere, which is expected of Matroska's variable-length block framing
+and is not by itself a statement about the codec payload. What decides it
+is the decode: both files' audio, decoded independently through the same
+ffmpeg build, are bit-for-bit identical, all 572,808 samples across all 10
+channels, sha256-verified equal, confirmed not a self-comparison by the
+differing hashes and sizes upstream of that decode. So the Windows and
+macOS builds of the Encoder, given identical input, produce Opus streams
+that are byte-different as delivered but decode to exactly the same
+audio. Both files are committed at
+[proof/fb360_encoder_crosscheck/](../proof/fb360_encoder_crosscheck/),
+with their hashes, so this holds up without re-running anything.
+
+What remains open: no output of the legacy MP4Box 0.8.1 survives, so the
+mp4's file-level-plus-track-metas layout is the logged command's intent
+rather than a byte-compared artefact; and player-side compatibility
+cannot be tested against Facebook's ingestion, which no longer exists.
 
 ## Encode matrix (phase 7)
 
