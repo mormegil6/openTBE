@@ -267,20 +267,24 @@ None of this changes what the renderers use: they always load the shipped
 MIT-derived set, which matches the SDK to the float floor, and the measured
 files serve only as an independent cross-check.
 
-### The one thing you cannot reproduce
+### What you cannot reproduce
 
 Phase 6 compares against a genuine Encoder-produced mp4 that the sibling
 study happened to still have; its embedded build stamp names FB360 Encoder
-v3.3.3 of 2020, the same terminal release measured throughout this
-project.
-`tools/mkv_order_probe.py` measures the mkv channel order against the
-Encoder's own output, through the GUI and the CLI separately, and both
-give TBE 1 to 8 then head-locked left/right, matching what
-`fb360_package.py` writes; anyone with the Encoder can rerun that. What
-you cannot reproduce is the era chain's exact bytes: the study's mp4 came
-from the Windows sibling build of v3.3.3, no mkv of which survives, and
-the legacy MP4Box 0.8.1 mux is preserved only as the logged command.
-docs/PROTOCOL.md, phase 6, holds the exact residue.
+v3.3.3, git a0e6e0451b36+ of 2020, on Windows, the same terminal release
+measured throughout this project. `tools/mkv_order_probe.py` measures the
+mkv channel order against the Encoder's own output, through the GUI and
+the CLI separately, and both give TBE 1 to 8 then head-locked left/right,
+matching what `fb360_package.py` writes; anyone with the Encoder can rerun
+that. The exact Windows build behind the study's mp4 is reproducible too:
+it is Farina's own archived Windows installer, and running it against the
+same probe gives an mkv whose decoded audio is bit-for-bit identical to
+the macOS build's, committed at
+[`proof/fb360_encoder_crosscheck/`](../proof/fb360_encoder_crosscheck/).
+What stays out of reach is the legacy MP4Box 0.8.1 mux itself: no copy of
+that binary survives, so its file-level-plus-track-metas layout is
+preserved only as the logged command. docs/PROTOCOL.md, phase 6, holds
+the exact residue.
 
 ---
 

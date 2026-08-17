@@ -176,13 +176,8 @@ Against the Encoder's real format menus, its CLI names in brackets:
 **Known gaps**, stated because the point of this project is that its claims
 can be checked: FuMa conversion and quad-binaural are not implemented, and
 the Encoder's focus feature was never measured. The mkv channel order is
-measured, not inferred:
-[tools/mkv_order_probe.py](tools/mkv_order_probe.py) reads it from the
-Encoder's own mkv output, GUI and CLI separately, and both match what
-openTBE writes. The build stamps embedded in the files pin the sibling
-study's chain to the same Encoder v3.3.3 measured here; what remains open,
-the Windows build's exact Opus bytes, is recorded in
-[docs/PROTOCOL.md](docs/PROTOCOL.md), phase 6.
+measured against the Encoder's own output, not inferred; see "The mkv
+cross-check" below.
 
 ## Checking any of this yourself
 
@@ -215,12 +210,13 @@ shipped filter set alone, so any clone reproduces it:
 
 ### The mkv cross-check
 
+[`tools/mkv_order_probe.py`](tools/mkv_order_probe.py) reads the channel
+order from a genuine Encoder-produced mkv rather than assuming it, and
 [`proof/fb360_encoder_crosscheck/`](proof/fb360_encoder_crosscheck/) holds
-the actual FB360 Encoder output behind the mkv channel-order claim above:
-one file from a macOS Encoder, one from the exact Windows build that made
-the sibling study's original recordings. Different bytes, identical
-decoded audio, sha256 included so you can check that without re-running
-anything.
+what it read: one file from a macOS Encoder, one from the exact Windows
+build that made the sibling study's original recordings. Different bytes,
+identical decoded audio, sha256 included so you can check that without
+re-running anything.
 
 ### Provenance, and what is not published
 
