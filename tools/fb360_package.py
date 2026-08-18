@@ -46,7 +46,7 @@ ENCODER_META = """<fb360>
   <audio>
     <encoder_metadata name="opentbe fb360_package (FB360 Encoder compatible)"
                       version="0.1">
-      <spatial sample_rate="{fs}" bit_depth="24" format="{src_format}"/>
+      <spatial sample_rate="{fs}" bit_depth="24" format="{src_format}" channel_map="0 1 2 3 4 5 6 7"/>
       <headlocked sample_rate="{fs}" bit_depth="24"/>
     </encoder_metadata>
   </audio>

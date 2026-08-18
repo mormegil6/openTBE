@@ -563,6 +563,27 @@ carrying the same encoder_metadata (format="tbe_8", channel_map="0 1 2 3 4
 5 6 7") and tbe_8.2 AudioChannelConfiguration tags from both paths.
 Parameter for parameter, that is the stream fb360_package.py writes.
 
+Direct check of fb360_package.py's own output (2026-08-18), prompted by a
+question about whether player auto-detection metadata is present: the
+work above established what the Encoder writes, not whether
+fb360_package.py's own output matches it, and the mp4 variant's ingest
+verification (above) checked read-back fidelity against the archived
+example file, which turns out to be a 2024 GPAC re-mux rather than a
+pristine original (see its own provenance note above), so a live capture
+is the cleaner ground truth anyway. Ran a genuine Encoder session and
+fb360_package.py side by side on the identical probe, both containers.
+The AudioChannelConfiguration tags match exactly on every track (tbe_8a,
+tbe_8b, headlocked on mp4; tbe_8.2 on mkv), and so does every field of
+the GSpherical block that could plausibly affect playback (Spherical,
+Stitched, ProjectionType, StereoMode); only StitchingSoftware differs,
+deliberately, since fb360_package.py does not claim to be the Encoder.
+One real gap: the file-level encoder_metadata's `<spatial>` element was
+missing `channel_map="0 1 2 3 4 5 6 7"`, present in the Encoder's own
+output on both containers. Fixed. ReyMux, checked the same way on an
+earlier capture, matches the AudioChannelConfiguration and GSpherical
+fields too, and is also missing channel_map, for whatever that is worth
+toward guessing which fields a player actually reads.
+
 A caution about round-trip numbers: any dB figure here is a measurement
 of particular content, not a property of the pipeline, and must not be
 used as an acceptance threshold for other material. On the archived
