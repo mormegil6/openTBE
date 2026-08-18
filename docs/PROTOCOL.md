@@ -518,7 +518,15 @@ mp4 variant:
   under a deliberate one-sample misalignment, is spectrally incoherent
   with the stems, and keeps the full 24 kHz bandwidth (noise shaping, not
   band-limiting). The archived AAC tracks are 2064 samples shorter than
-  the PCM stems, entirely within the silent tail.
+  the PCM stems, entirely within the silent tail. fb360_package.py uses
+  ffmpeg's native AAC encoder (-c:a aac), the same one Przemysław
+  Danowski identifies as the weak link, particularly at high frequencies,
+  in his own from-scratch FB360 pipeline:
+  <https://blog.przemekdanowski.com/encoding-fb360-video-without-fb360-encoder/>.
+  His fix swaps in FDK-AAC; that encoder is absent from the standard
+  Homebrew ffmpeg build this project's own docs tell people to install
+  (GPL/nonfree licensing keeps it out by default), so it is not a drop-in
+  default here, only an option for whoever builds ffmpeg with it enabled.
 - Metadata placement needs care, because the surviving evidence
   disagrees with itself. The legacy app's logged command (MP4Box
   0.8.1) set one file-level meta (encoder XML, via the old "tk=0"
@@ -582,7 +590,16 @@ missing `channel_map="0 1 2 3 4 5 6 7"`, present in the Encoder's own
 output on both containers. Fixed. ReyMux, checked the same way on an
 earlier capture, matches the AudioChannelConfiguration and GSpherical
 fields too, and is also missing channel_map, for whatever that is worth
-toward guessing which fields a player actually reads.
+toward guessing which fields a player actually reads. Przemysław
+Danowski hit this same class of problem independently, building an
+FB360-compatible mp4 from raw ffmpeg rather than any of these tools: his
+write-up
+(<https://blog.przemekdanowski.com/encoding-fb360-video-without-fb360-encoder/>)
+reports the file playing correctly on Quest 2 but lacking the metadata
+for automatic format detection, requiring the player to be set by hand
+on first launch. He also reports an mkv-plus-Opus attempt that did not
+work; this project's own mkv path is verified working end to end
+(above, and proof/fb360_encoder_crosscheck/).
 
 A caution about round-trip numbers: any dB figure here is a measurement
 of particular content, not a property of the pipeline, and must not be
