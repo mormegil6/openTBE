@@ -289,6 +289,13 @@ engineering.
     [1.7.12](https://web.archive.org/web/20260815073938/https://www.angelofarina.it/Public/Facebook-Spatial-Workstation/Download/SDK/Audio360_SDK_1.7.12-cd52f5f44271.zip),
     [1.3.0](https://web.archive.org/web/20260815073950/https://www.angelofarina.it/Public/Facebook-Spatial-Workstation/Download/SDK/Audio360_SDK_1.3.0.zip),
     first captured 2026-08-15 at this project's request
+- **Przemysław Danowski** - his
+  ["Encoding FB360 video without FB360 Encoder"](https://blog.przemekdanowski.com/encoding-fb360-video-without-fb360-encoder/)
+  documents building an FB360-compatible mp4 from raw ffmpeg, independently
+  of this project. Nothing here derives from it, but two of his findings
+  match what this project measured separately: the native ffmpeg AAC
+  encoder's quality and the metadata gap the channel_map fix closes; both
+  in [docs/PROTOCOL.md](docs/PROTOCOL.md).
 
 ## License
 
